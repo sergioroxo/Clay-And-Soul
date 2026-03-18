@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -194,7 +195,7 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'IB
 /* Move prompt — centered overlay */
 #move-overlay{
   position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;
-  padding-bottom:18%;
+  padding-bottom:10%;
   pointer-events:none;z-index:16;}
 #move-prompt-wrap{
   display:flex;flex-direction:column;align-items:center;gap:6px;
@@ -205,28 +206,24 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'IB
   transition:color .3s;}
 #move-arrow-big{
   position:relative;
-  width:clamp(90px,16vw,160px);
-  height:clamp(90px,16vw,160px);
+  width:clamp(100px,18vw,170px);
+  height:clamp(100px,18vw,170px);
   display:flex;align-items:center;justify-content:center;
   animation:arrow-breathe 1.6s ease-in-out infinite;
-  transition:transform .06s;}
+  flex-shrink:0;}
 #arrow-halo{
-  position:absolute;inset:-30%;border-radius:50%;
-  background:radial-gradient(ellipse,var(--song-color,#ff006e) 0%,transparent 70%);
-  opacity:0.45;animation:arrow-breathe 1.6s ease-in-out infinite;
-  filter:blur(12px);}
+  position:absolute;inset:-40%;border-radius:50%;
+  background:radial-gradient(ellipse,var(--song-color,#ff006e) 0%,transparent 65%);
+  opacity:0.5;filter:blur(14px);
+  animation:arrow-breathe 1.6s ease-in-out infinite;}
 #arrow-panel{
-  position:relative;width:100%;height:100%;
-  background:rgba(255,255,255,0.1);
-  border:3px solid rgba(255,255,255,0.6);
+  position:absolute;inset:0;
+  background:rgba(255,255,255,0.12);
+  border:3px solid rgba(255,255,255,0.7);
   border-radius:20px;
-  box-shadow:
-    0 0 0 1px var(--song-color,#ff006e),
-    0 0 25px var(--song-color,#ff006e),
-    0 0 60px var(--song-color,#ff006e),
-    inset 0 0 25px rgba(255,255,255,0.12);
+  box-shadow:0 0 0 2px var(--song-color,#ff006e),0 0 30px var(--song-color,#ff006e),0 0 70px var(--song-color,#ff006e),inset 0 0 30px rgba(255,255,255,0.1);
   display:flex;align-items:center;justify-content:center;}
-#arrow-svg{width:65%;height:65%;transition:transform .06s;}
+#arrow-svg{width:62%;height:62%;display:block;}
 #arrow-shape{fill:var(--song-color,#ff006e);}
 #arrow-outline{stroke:rgba(255,255,255,0.9);}
 @keyframes arrow-breathe{
@@ -314,7 +311,7 @@ kbd{border:1px solid rgba(255,255,255,.15);border-radius:2px;padding:0 3px;font-
 #lyric-panel{width:230px;flex-shrink:0;display:flex;flex-direction:column;
   padding:14px 12px;background:rgba(0,0,0,.5);border-left:1px solid rgba(255,255,255,.05);overflow:hidden}
 .lp-title{font-size:8px;letter-spacing:3px;color:#2a2a3a;margin-bottom:10px;font-family:'Share Tech Mono'}
-#lyric-inner{flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+#lyric-inner{flex:1;display:flex;flex-direction:column;gap:6px;overflow:hidden;max-height:100%;}
 .ll{font-family:'VT323';font-size:18px;color:#1a1a2a;line-height:1.3;padding:3px 7px;
   border-left:2px solid transparent;letter-spacing:1px;transition:.35s}
 .ll.cur{color:#fff;font-size:21px;border-left-color:var(--song-color,#ff006e);
@@ -1230,7 +1227,10 @@ kbd {
   </div>
 </div>
 
-<audio id="shared-audio" preload="auto" src="https://github.com/sergioroxo/Clay-And-Soul/blob/main/The%20Garden%20Gate%20-%20Clay%20and%20Soul%20-%20Sonauto.ogg"></audio>
+<audio id="shared-audio" preload="auto">
+  <source src="https://sergioroxo.github.io/Clay-And-Soul/clay-and-soul.ogg" type="audio/ogg">
+  <source src="https://sergioroxo.github.io/Clay-And-Soul/clay-and-soul.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 // ═══ SONGS DATA ═══
@@ -1698,7 +1698,11 @@ function startSong(song) {
 
   // Start game audio
   const ga = document.getElementById('shared-audio');
-  if(ga) { ga.currentTime = 0; ga.play().catch(()=>{}); }
+  if(ga) {
+    try { ga.currentTime = 0; } catch(e) {}
+    ga.load(); // reload sources
+    setTimeout(() => ga.play().catch(()=>{}), 100);
+  }
 }
 
 let lyricIdx = 0;
@@ -1725,7 +1729,11 @@ function startLyrics(song) {
 
   function tick() {
     if(!G.song) return;
-    const t = (audio && !isNaN(audio.currentTime)) ? audio.currentTime : 0;
+    // Get current time — works for both MP3 and OGG
+    const audioEl = document.getElementById('shared-audio');
+    const t = (audioEl && audioEl.currentTime && !isNaN(audioEl.currentTime) && audioEl.currentTime > 0)
+      ? audioEl.currentTime
+      : (G.progress / Math.max(1, G.song.moves.length)) * 35; // fallback: estimate from progress
 
     // Find which lyric we should be on
     let newIdx = 0;
