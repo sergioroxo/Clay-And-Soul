@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUST CHANGE™ · SurvivingSOGICE</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'IBM Plex Mono',monospace}
+
+/* ─── VHS OVERLAY ─── */
+#vhs-layer{position:fixed;inset:0;z-index:900;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);
+  animation:scan 10s linear infinite}
+@keyframes scan{from{background-position:0 0}to{background-position:0 200px}}
+
+/* ─── SCREEN SYSTEM ─── */
+.screen{position:fixed;inset:0;display:none;}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════════════
+   SCREEN: DISCLAIMER
+═══════════════════════════════════════════ */
+#s-disclaimer{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;gap:28px}
+.disc-title{font-family:'Bebas Neue';font-size:30px;letter-spacing:5px;color:#fff}
+.disc-body{font-size:12px;line-height:2;color:#888;max-width:620px}
+.disc-body b{color:#fff} .disc-body em{color:#ff006e}
+.disc-btns{display:flex;gap:12px}
+.btn-enter{font-family:'Bebas Neue';font-size:18px;letter-spacing:3px;background:#fff;color:#000;border:none;padding:12px 40px;cursor:pointer;transition:.15s}
+.btn-enter:hover{background:#ddd}
+.btn-leave{font-family:'Bebas Neue';font-size:18px;letter-spacing:3px;background:none;border:1px solid #333;color:#555;padding:12px 40px;cursor:pointer}
+.disc-attr{font-size:9px;color:#222;letter-spacing:2px}
+
+/* ═══════════════════════════════════════════
+   SCREEN: INFOMERCIAL
+═══════════════════════════════════════════ */
+#s-infomercial{background:#08000d;align-items:center;justify-content:center;overflow:hidden}
+.vhs-bars{position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,#ff006e,#ffe000,#00ff41,#00d4ff,#ff006e);
+  animation:bars .4s steps(1) infinite}
+@keyframes bars{0%{opacity:1}50%{opacity:.3}}
+.vhs-rec{position:absolute;top:14px;right:16px;font-family:'VT323';font-size:22px;color:#00ff41;
+  text-shadow:0 0 8px #00ff41;letter-spacing:2px}
+.vhs-ch{position:absolute;top:14px;left:16px;font-family:'VT323';font-size:22px;color:#ffe000;
+  text-shadow:0 0 8px #ffe000}
+.rec-dot{display:inline-block;width:9px;height:9px;background:#f00;border-radius:50%;margin-right:5px;
+  animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.im-phase{display:none;flex-direction:column;align-items:center;gap:18px;
+  animation:fi .5s ease;text-align:center;padding:20px;max-width:700px}
+.im-phase.show{display:flex}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.im-big{font-family:'Bebas Neue';font-size:clamp(44px,9vw,100px);letter-spacing:4px;line-height:.9;
+  background:linear-gradient(135deg,#ff006e,#ffe000,#00ff41);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 18px rgba(255,0,110,.5));
+  animation:glitch 5s infinite}
+@keyframes glitch{0%,93%,100%{transform:none}
+  94%{transform:translate(3px,-1px) skewX(2deg);filter:drop-shadow(3px 0 0 #00ff41) drop-shadow(-3px 0 0 #ff006e)}
+  96%{transform:translate(-2px,1px)}
+  98%{transform:translate(1px,2px)}}
+
+.im-sub{font-family:'VT323';font-size:24px;color:#ffe000;letter-spacing:3px;text-shadow:0 0 10px #ffe000}
+.im-line{width:300px;height:2px;background:linear-gradient(90deg,transparent,#ff006e,transparent)}
+
+.tbox{background:rgba(0,212,255,.07);border:2px solid #00d4ff;padding:18px 28px;max-width:520px;
+  font-size:14px;line-height:1.75;color:#b0eeff;position:relative;text-align:left}
+.tbox::after{content:attr(data-name);position:absolute;bottom:-14px;right:16px;
+  background:#00d4ff;color:#000;font-family:'VT323';font-size:17px;padding:1px 9px;letter-spacing:1px}
+.tbox .qm{font-size:36px;color:#00d4ff;line-height:.4;display:block;margin-bottom:8px}
+
+.price{font-family:'Bebas Neue';font-size:80px;color:#ffe000;
+  text-shadow:4px 4px 0 #b05500,0 0 30px #ffe000;
+  animation:pp .8s ease-in-out infinite}
+@keyframes pp{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.callnow{font-family:'Bebas Neue';font-size:52px;letter-spacing:4px;color:#ff006e;
+  text-shadow:3px 3px 0 #700,0 0 20px #ff006e;animation:shk .12s infinite}
+@keyframes shk{0%{transform:none}25%{transform:translate(1px,-1px)}75%{transform:translate(-1px,1px)}}
+.phone{font-family:'VT323';font-size:44px;color:#fff;letter-spacing:4px;text-shadow:0 0 12px #fff}
+
+.gbadge{width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle,#ffe000,#ff8800);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';color:#000;font-size:13px;letter-spacing:1px;
+  text-align:center;line-height:1.2;padding:10px;
+  box-shadow:0 0 30px rgba(255,224,0,.6);animation:spin-b 8s linear infinite}
+@keyframes spin-b{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.gbadge .big{font-size:26px}
+
+.start-btn{font-family:'Bebas Neue';font-size:34px;letter-spacing:4px;
+  background:linear-gradient(135deg,#ff006e,#ffe000);color:#000;border:none;
+  padding:14px 48px;cursor:pointer;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:.12s;box-shadow:0 0 30px rgba(255,0,110,.4)}
+.start-btn:hover{transform:scale(1.05);box-shadow:0 0 50px rgba(255,0,110,.7)}
+
+.fine{font-size:9px;color:#444;max-width:480px;line-height:1.5;font-family:'Share Tech Mono'}
+
+.im-prog-wrap{margin-top:16px}
+.im-prog{width:380px;max-width:80vw;height:5px;background:#111;border:1px solid #222;overflow:hidden;border-radius:1px}
+.im-prog-fill{height:100%;width:0;background:linear-gradient(90deg,#ff006e,#ffe000);transition:width .1s}
+.im-skip{font-size:9px;color:#333;text-align:center;margin-top:5px;letter-spacing:2px}
+
+/* ═══════════════════════════════════════════
+   SCREEN: SONG SELECT
+═══════════════════════════════════════════ */
+#s-select{background:#04040a;align-items:center;justify-content:flex-start;padding:30px 20px;overflow-y:auto;gap:20px}
+.sel-title{font-family:'Bebas Neue';font-size:clamp(36px,6vw,60px);letter-spacing:6px;
+  background:linear-gradient(135deg,#fff 0%,#555 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sel-sub{font-size:10px;color:#333;letter-spacing:3px}
+.song-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;width:100%;max-width:1000px}
+
+.song-card{border:1px solid #181820;background:#0a0a10;padding:18px;cursor:pointer;
+  position:relative;overflow:hidden;transition:.2s;
+  clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
+.song-card:hover:not(.locked){border-color:#2a2a3a;background:#10101a;transform:translateY(-2px)}
+.song-card.locked{opacity:.3;cursor:not-allowed}
+.card-stripe{height:3px;position:absolute;top:0;left:0;right:0}
+.card-num{font-family:'Bebas Neue';font-size:52px;color:#111;position:absolute;right:14px;bottom:8px;line-height:1}
+.card-tactic{font-size:9px;letter-spacing:2px;color:#444;margin-bottom:7px;font-family:'Share Tech Mono'}
+.card-title{font-family:'Bebas Neue';font-size:26px;letter-spacing:2px;margin-bottom:5px;line-height:1}
+.card-artist{font-size:10px;color:#555;letter-spacing:1px;margin-bottom:10px}
+.card-desc{font-size:10px;color:#3a3a4a;line-height:1.5}
+.card-lock{font-family:'VT323';font-size:15px;color:#2a2a3a;letter-spacing:2px;margin-top:8px}
+.card-unlocked-badge{
+  display:inline-block;margin-top:10px;
+  font-size:9px;letter-spacing:2px;color:#2adc6a;border:1px solid #1a6a38;
+  padding:2px 8px;font-family:'Share Tech Mono'}
+
+/* ═══════════════════════════════════════════
+   SCREEN: GAME
+═══════════════════════════════════════════ */
+#s-game{background:#000;overflow:hidden}
+#game-bg{position:absolute;inset:0;z-index:0;transition:background 3s ease}
+#bg-text{position:absolute;inset:0;z-index:8;pointer-events:none;opacity:0;transition:opacity 4s;overflow:hidden}
+.bgtf{position:absolute;font-family:'VT323';font-size:13px;color:rgba(255,255,255,.1);pointer-events:none;letter-spacing:1px;white-space:nowrap;animation:bgtf-drift var(--drift-dur,20s) ease-in-out infinite alternate;}
+@keyframes bgtf-drift{from{transform:translate(0,0) rotate(var(--rot,0deg))}to{transform:translate(var(--dx,10px),var(--dy,-8px)) rotate(var(--rot2,5deg))}}
+#hit-flash{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;transition:opacity .05s;}
+#conv-flash{position:absolute;inset:0;z-index:50;pointer-events:none;opacity:0;background:rgba(255,255,255,.9);transition:opacity .1s}
+
+/* HUD */
+#game-hud{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;
+  padding:8px 18px;background:rgba(0,0,0,.75);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.hud-title{font-family:'Bebas Neue';font-size:20px;letter-spacing:3px}
+.hud-lvl{font-size:9px;letter-spacing:2px;padding:2px 10px;border:1px solid;margin-top:2px;display:inline-block;font-family:'Share Tech Mono'}
+.hud-tactic{font-size:9px;color:#444;letter-spacing:1.5px}
+#conv-meter-wrap{width:150px}
+.meter-lbl{font-size:8px;letter-spacing:2px;color:#555;margin-bottom:3px;font-family:'Share Tech Mono'}
+.meter-track{height:7px;background:#111;border:1px solid #222;overflow:hidden;border-radius:1px}
+.meter-fill{height:100%;width:0;background:linear-gradient(90deg,#00ff41,#ffe000,#ff006e);transition:width .6s}
+.meter-ends{display:flex;justify-content:space-between;margin-top:2px;font-size:7px;font-family:'Share Tech Mono'}
+#score-wrap{text-align:right}
+.score-lbl{font-size:9px;letter-spacing:2px;color:#444;font-family:'Share Tech Mono'}
+#score-num{font-family:'VT323';font-size:36px;letter-spacing:2px;color:#ff006e}
+
+/* Main game area */
+
+/* ════ NEW GAME LAYOUT ════ */
+#game-hud{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);
+  pointer-events:none;}
+#hud-left{display:flex;flex-direction:column;gap:2px}
+#hud-center{display:flex;align-items:center;justify-content:center}
+#hud-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.hud-title{font-family:'Bebas Neue';font-size:18px;letter-spacing:3px;color:var(--song-color,#ff006e)}
+.hud-tactic{font-family:'Share Tech Mono';font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.35);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hud-lvl{font-family:'VT323';font-size:14px;letter-spacing:3px;border:1px solid var(--song-color,#ff006e);color:var(--song-color,#ff006e);padding:1px 8px}
+.score-lbl{font-family:'Share Tech Mono';font-size:7px;letter-spacing:2px;color:rgba(255,255,255,.3);text-align:right}
+#score-num{font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:rgba(255,255,255,.7);text-align:right}
+#score-lbl{font-family:'Share Tech Mono';font-size:7px;letter-spacing:2px;color:rgba(255,255,255,.3);text-align:right}
+
+/* Main play area */
+#game-main{position:absolute;inset:0;z-index:5;overflow:hidden}
+
+/* Dance floor — avatar fills full screen */
+#dance-floor{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#av-wrap{position:absolute;inset:0}
+
+#av-void{position:absolute;inset:0;background:radial-gradient(ellipse,rgba(0,0,0,0) 30%,rgba(0,0,0,.8) 100%);pointer-events:none}
+
+/* Hit burst — full screen radial flash on correct hit */
+#hit-burst{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center, var(--song-color,#ff006e) 0%, transparent 65%);
+  opacity:0;transition:opacity 0.05s;}
+
+/* Move prompt — centered overlay */
+#move-overlay{
+  position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:18%;
+  pointer-events:none;z-index:16;}
+#move-prompt-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  text-align:center;}
+#move-prompt-label{
+  font-family:'Share Tech Mono';font-size:9px;letter-spacing:4px;
+  color:rgba(255,255,255,.25);text-transform:uppercase;
+  transition:color .3s;}
+#move-arrow-big{
+  position:relative;
+  width:clamp(90px,16vw,160px);
+  height:clamp(90px,16vw,160px);
+  display:flex;align-items:center;justify-content:center;
+  animation:arrow-breathe 1.6s ease-in-out infinite;
+  transition:transform .06s;}
+#arrow-halo{
+  position:absolute;inset:-30%;border-radius:50%;
+  background:radial-gradient(ellipse,var(--song-color,#ff006e) 0%,transparent 70%);
+  opacity:0.45;animation:arrow-breathe 1.6s ease-in-out infinite;
+  filter:blur(12px);}
+#arrow-panel{
+  position:relative;width:100%;height:100%;
+  background:rgba(255,255,255,0.1);
+  border:3px solid rgba(255,255,255,0.6);
+  border-radius:20px;
+  box-shadow:
+    0 0 0 1px var(--song-color,#ff006e),
+    0 0 25px var(--song-color,#ff006e),
+    0 0 60px var(--song-color,#ff006e),
+    inset 0 0 25px rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;}
+#arrow-svg{width:65%;height:65%;transition:transform .06s;}
+#arrow-shape{fill:var(--song-color,#ff006e);}
+#arrow-outline{stroke:rgba(255,255,255,0.9);}
+@keyframes arrow-breathe{
+  0%,100%{
+    filter:brightness(1.1) drop-shadow(0 0 30px var(--song-color,#ff006e));
+    transform:scale(1);}
+  50%{
+    filter:brightness(1.5) drop-shadow(0 0 60px var(--song-color,#ff006e));
+    transform:scale(1.04);}}
+.arrow-hit{transform:scale(1.35) !important;filter:brightness(2) !important;animation:none !important}
+
+/* Lyric panel — right edge overlay */
+#lyric-panel{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:220px;max-height:60vh;overflow:hidden;
+  padding:10px 14px 10px 10px;
+  background:linear-gradient(to left,rgba(0,0,0,.6),transparent);
+  pointer-events:none;z-index:12;}
+.lp-title{font-size:9px;color:rgba(255,255,255,.2);letter-spacing:3px;margin-bottom:8px}
+.ll{font-family:'Share Tech Mono';font-size:10px;color:rgba(255,255,255,.18);
+  letter-spacing:1px;line-height:1.8;transition:all .3s;padding:1px 0}
+.ll.cur{color:rgba(255,255,255,.9);font-size:12px;letter-spacing:2px;
+  text-shadow:0 0 12px rgba(255,255,255,.4)}
+.ll.past{color:rgba(255,255,255,.08)}
+
+/* Conversion meter — full-width bottom strip */
+#conv-bar-wrap{
+  position:absolute;bottom:28px;left:0;right:0;z-index:20;
+  padding:0 16px;pointer-events:none;display:flex;align-items:center;gap:10px;}
+#conv-bar-fill{
+  height:3px;background:var(--song-color,#ff006e);
+  box-shadow:0 0 8px var(--song-color,#ff006e);
+  transition:width .3s;flex:1;border-radius:2px;
+  position:relative;width:0%;}
+#conv-bar-label{
+  font-family:'Share Tech Mono';font-size:7px;letter-spacing:2px;
+  color:rgba(255,255,255,.25);white-space:nowrap;flex-shrink:0;}
+#void-count{
+  font-family:'VT323';font-size:13px;color:rgba(255,255,255,.3);
+  letter-spacing:2px;flex-shrink:0;}
+
+/* Bottom key hints */
+#game-bottom{
+  position:absolute;bottom:8px;left:0;right:0;z-index:20;
+  display:flex;justify-content:center;pointer-events:none;}
+.keyhint{font-size:9px;color:rgba(255,255,255,.12);letter-spacing:1px}
+kbd{border:1px solid rgba(255,255,255,.15);border-radius:2px;padding:0 3px;font-size:8px}
+
+/* Scanline overlay — appears at 50%+ void */
+#game-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:18;opacity:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);
+  transition:opacity 2s;}
+
+
+/* Move panel */
+#move-panel{width:180px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:18px;gap:12px;
+  background:rgba(0,0,0,.5);border-right:1px solid rgba(255,255,255,.05)}
+.mp-next-lbl{font-size:8px;letter-spacing:3px;color:#2a2a3a;font-family:'Share Tech Mono'}
+.move-prompt{width:90px;height:90px;position:relative;display:flex;align-items:center;justify-content:center}
+#move-arrow{font-size:100px;opacity:.12;transition:.18s;filter:grayscale(1);line-height:1;display:block;text-align:center}
+#move-arrow.active{opacity:1;filter:none;text-shadow:0 0 20px currentColor;animation:ap .3s}
+@keyframes ap{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.timing-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,.08)}
+.timing-ring.shrink{animation:sr 1.8s linear}
+@keyframes sr{from{transform:scale(1.5);opacity:.8;border-color:#00ff41}to{transform:scale(1);opacity:0}}
+#move-name{font-size:9px;letter-spacing:2px;color:#333;font-family:'Share Tech Mono';text-align:center}
+#move-instr{font-size:9px;color:#1a1a2a;letter-spacing:1px;text-align:center;line-height:1.8;margin-top:12px}
+
+/* Dance floor */
+#dance-floor{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+
+
+#av-void{position:absolute;inset:0;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(10,10,10,0) 25%,rgba(10,10,10,.95) 100%);
+  transition:opacity 2s}
+
+/* Score popup */
+.spop{position:absolute;font-family:'Bebas Neue';font-size:34px;pointer-events:none;
+  animation:pr 1s forwards;z-index:20;letter-spacing:2px}
+@keyframes pr{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-70px) scale(.7);opacity:0}}
+
+/* Lyric panel */
+#lyric-panel{width:230px;flex-shrink:0;display:flex;flex-direction:column;
+  padding:14px 12px;background:rgba(0,0,0,.5);border-left:1px solid rgba(255,255,255,.05);overflow:hidden}
+.lp-title{font-size:8px;letter-spacing:3px;color:#2a2a3a;margin-bottom:10px;font-family:'Share Tech Mono'}
+#lyric-inner{flex:1;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.ll{font-family:'VT323';font-size:18px;color:#1a1a2a;line-height:1.3;padding:3px 7px;
+  border-left:2px solid transparent;letter-spacing:1px;transition:.35s}
+.ll.cur{color:#fff;font-size:21px;border-left-color:var(--song-color,#ff006e);
+  background:rgba(255,0,110,.04);text-shadow:0 0 8px var(--song-color,#ff006e)}
+.ll.past{color:#111}
+
+/* Bottom bar */
+#game-bottom{position:relative;z-index:10;padding:7px 18px;background:rgba(0,0,0,.8);
+  border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;
+  justify-content:space-between;flex-shrink:0}
+.keyhint{font-size:9px;color:#333;letter-spacing:1px}
+.keyhint kbd{display:inline-block;padding:1px 5px;border:1px solid #2a2a2a;
+  border-radius:2px;color:#666;margin:0 2px;font-family:inherit}
+#void-count{font-family:'VT323';font-size:18px;color:#333;letter-spacing:2px}
+
+/* ═══════════════════════════════════════════
+   SCREEN: VOID (level complete)
+═══════════════════════════════════════════ */
+#s-void{background:#020203;align-items:center;justify-content:center;gap:28px}
+.void-ttl{font-family:'Bebas Neue';font-size:clamp(38px,7vw,84px);letter-spacing:6px;
+  animation:vr 3s forwards}
+@keyframes vr{0%{color:#fff;text-shadow:0 0 40px #fff;letter-spacing:20px}
+  100%{color:#161616;text-shadow:none;letter-spacing:6px}}
+.void-sub{font-size:11px;color:#181818;letter-spacing:3px;animation:fds 4s forwards;opacity:0;text-align:center;max-width:500px;line-height:1.8;white-space:pre-line}
+@keyframes fds{0%,40%{opacity:0}100%{opacity:1}}
+.void-stats{display:flex;gap:28px;animation:fds 5s forwards;opacity:0}
+.vs-n{font-family:'Bebas Neue';font-size:34px;color:#202020;text-align:center}
+.vs-l{font-size:8px;color:#161616;letter-spacing:3px;text-align:center;font-family:'Share Tech Mono'}
+.void-unlock-msg{
+  font-family:'VT323';font-size:20px;color:#1a3a28;letter-spacing:3px;
+  animation:fds 6.5s forwards;opacity:0;border:1px solid #0a2018;
+  padding:8px 20px;background:#030a06}
+.void-dossier-btn{
+  font-family:'Bebas Neue';font-size:24px;letter-spacing:4px;
+  background:none;border:1px solid #1a2a1a;color:#1a2a1a;
+  padding:12px 32px;cursor:pointer;transition:.4s;
+  animation:fds 7.5s forwards;opacity:0;pointer-events:none}
+.void-dossier-btn:hover{border-color:#2adc6a;color:#2adc6a;box-shadow:0 0 20px rgba(42,220,106,.2)}
+.void-skip{
+  font-size:9px;color:#111;letter-spacing:2px;cursor:pointer;
+  animation:fds 8.5s forwards;opacity:0;background:none;border:none;font-family:inherit;pointer-events:none}
+.void-skip:hover{color:#333}
+
+/* ═══════════════════════════════════════════
+   SCREEN: DOSSIER
+═══════════════════════════════════════════ */
+#s-dossier{background:#06060a;flex-direction:column}
+
+/* Dossier header */
+#dossier-hdr{
+  background:#04040a;border-bottom:1px solid #121220;
+  padding:0;flex-shrink:0;
+  animation:reveal-hdr .8s ease forwards}
+@keyframes reveal-hdr{from{transform:translateY(-100%);opacity:0}to{transform:none;opacity:1}}
+@keyframes arrow-pulse{
+  0%{transform:scale(1.35);opacity:0.6}
+  60%{transform:scale(0.95);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes milestone-fade{0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}15%{opacity:1;transform:translate(-50%,-50%) scale(1)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-54%) scale(1.02)}}
+@keyframes seam-fade{0%{opacity:0}8%{opacity:1}60%{opacity:1}80%{opacity:0}100%{opacity:0}}
+@keyframes apparatus-fade{0%{opacity:0;transform:translateX(-50%) translateY(4px)}12%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-3px)}}
+
+.doss-nav{display:flex;align-items:center;border-bottom:1px solid #0e0e1a}
+.dnav-tab{font-family:'Share Tech Mono';font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:10px 18px;cursor:pointer;color:#2a2a3a;border:none;background:none;
+  border-right:1px solid #0e0e1a;transition:.15s;white-space:nowrap}
+.dnav-tab:hover{color:#888;background:rgba(255,255,255,.02)}
+.dnav-tab.active{color:#2adc6a;background:rgba(42,220,106,.04);border-bottom:2px solid #2adc6a}
+.doss-meta{display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.doss-title{font-family:'Bebas Neue';font-size:26px;letter-spacing:4px;color:#fff}
+.doss-artist{font-size:10px;color:#333;letter-spacing:2px}
+.tag-pill{display:inline-block;padding:2px 8px;border-radius:1px;font-size:8px;
+  letter-spacing:1.5px;text-transform:uppercase;border:1px solid;
+  font-family:'Share Tech Mono';white-space:nowrap}
+
+/* Dossier audio player */
+#doss-player{
+  background:#030306;border-bottom:1px solid #0e0e1a;
+  padding:9px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.play-btn{width:34px;height:34px;border-radius:50%;background:#2adc6a;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:#000;flex-shrink:0;transition:.12s}
+.play-btn:hover{background:#40ff88;transform:scale(1.06)}
+.wave-wrap{flex:1;height:34px;cursor:pointer;background:#0a0a10;
+  border:1px solid #121220;border-radius:1px;overflow:hidden;position:relative}
+.wave-bars{display:flex;align-items:center;height:100%;gap:1px;padding:2px 3px}
+.wave-bar{flex:1;border-radius:1px;min-width:2px;transition:background .4s}
+.wave-prog{position:absolute;top:0;left:0;height:100%;background:rgba(42,220,106,.08);
+  pointer-events:none;border-right:1px solid #2adc6a;transition:width .5s linear}
+.time-disp{font-family:'VT323';font-size:19px;color:#2adc6a;letter-spacing:2px;flex-shrink:0;min-width:80px;text-align:right}
+
+/* Dossier main layout */
+#doss-main{flex:1;display:flex;overflow:hidden}
+
+/* Lyrics column */
+#doss-lyrics{width:380px;flex-shrink:0;overflow-y:auto;border-right:1px solid #0e0e1a;padding:16px 0}
+.doss-lyrics-hdr{font-size:8px;letter-spacing:3px;color:#222;text-transform:uppercase;
+  padding:0 16px 12px;border-bottom:1px solid #0e0e1a;margin-bottom:12px;
+  display:flex;justify-content:space-between;font-family:'Share Tech Mono'}
+.lyric-section-divider{font-size:8px;letter-spacing:3px;color:#1a1a2a;text-transform:uppercase;
+  padding:6px 16px 4px;font-family:'Share Tech Mono'}
+.lyric-block{padding:9px 16px;border-left:3px solid transparent;cursor:pointer;
+  transition:.15s;position:relative}
+.lyric-block:hover{background:rgba(255,255,255,.015);border-left-color:var(--tc)}
+.lyric-block.sel{background:rgba(255,255,255,.03);border-left-color:var(--tc)}
+.lyric-text{font-family:'Bebas Neue';font-size:17px;letter-spacing:1.5px;color:#ccc;
+  line-height:1.2;margin-bottom:4px}
+.lyric-badge{display:inline-block;padding:1px 6px;border:1px solid var(--tc);
+  color:var(--tc);font-size:8px;letter-spacing:1px;font-family:'Share Tech Mono';
+  border-radius:1px;opacity:.6;transition:.15s}
+.lyric-block:hover .lyric-badge,.lyric-block.sel .lyric-badge{opacity:1}
+.lyric-tooltip{font-size:11px;color:#555;line-height:1.7;margin-top:9px;
+  padding-top:9px;border-top:1px solid #0e0e1a;display:none}
+.lyric-block.sel .lyric-tooltip{display:block;color:#aaa}
+
+/* Right dossier panels */
+#doss-right{flex:1;overflow-y:auto;padding:22px 24px;display:flex;flex-direction:column;gap:20px}
+.view-panel{display:none;flex-direction:column;gap:20px}
+.view-panel.active{display:flex}
+
+.panel{border:1px solid #0e0e1a;background:#080810}
+.panel-hdr{padding:9px 14px;border-bottom:1px solid #0e0e1a;font-size:8px;
+  letter-spacing:3px;text-transform:uppercase;color:#2adc6a;
+  font-family:'Share Tech Mono';display:flex;justify-content:space-between;align-items:center}
+.panel-body{padding:14px}
+
+.rn{font-size:11.5px;line-height:1.9;color:#666}
+.rn p{margin-bottom:12px} .rn p:last-child{margin-bottom:0}
+.rn b{color:#aaa} .rn em{color:#4488cc}
+.hl{background:rgba(255,0,110,.1);color:#ff6688;padding:1px 4px;border-radius:1px}
+
+.attr-block{background:#030306;border:1px solid #0e0e1a;padding:12px 14px;
+  font-size:10px;color:#2a2a3a;line-height:1.7;letter-spacing:.5px}
+.attr-block b{color:#444}
+
+.tactic-card{border:1px solid #0e0e1a;padding:12px 14px;position:relative;overflow:hidden;margin-bottom:10px}
+.tactic-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tc)}
+.tc-name{font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;color:var(--tc);margin-bottom:4px}
+.tc-lines{font-size:10px;color:#333;font-style:italic;margin-bottom:6px;letter-spacing:.5px}
+.tc-analysis{font-size:11px;color:#666;line-height:1.65}
+
+.prompt-box{background:#030a04;border:1px solid #0a1a0a;padding:14px;
+  font-family:'Share Tech Mono';font-size:11px;color:#3a5a3a;
+  line-height:1.75;white-space:pre-wrap;word-break:break-word;position:relative}
+.prompt-box::before{content:'> SONAUTO GENERATION PROMPT (VERBATIM)';display:block;
+  font-size:8px;letter-spacing:3px;color:#1a4a1a;margin-bottom:8px;
+  border-bottom:1px solid #0a1a0a;padding-bottom:6px}
+
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px}
+.meta-item span:first-child{display:block;font-size:8px;letter-spacing:2px;color:#2a2a3a;
+  margin-bottom:3px;font-family:'Share Tech Mono'}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+
+/* Dossier back button */
+.doss-back{font-family:'Share Tech Mono';font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  background:none;border:1px solid #1a1a2a;color:#2a2a3a;padding:5px 14px;
+  cursor:pointer;transition:.15s}
+.doss-back:hover{border-color:#444;color:#888}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg,#000)}
+::-webkit-scrollbar-thumb{background:#1a1a2a;border-radius:1px}
+
+/* ════ OVERRIDES — nullify old layout CSS ════ */
+#score-wrap{display:none}
+#conv-meter-wrap{display:none}
+.move-prompt{display:none}
+#move-panel{display:none}
+#timing-ring{display:none}
+
+/* ════════════════════════════════════════════
+   GAME SCREEN — DEFINITIVE RULES
+   These override all previous declarations
+════════════════════════════════════════════ */
+
+/* Screen base — position:fixed layer */
+.screen { position:fixed; inset:0; display:none; overflow:hidden; }
+.screen.active { display:block; }
+
+/* Game screen root */
+#s-game { background:#1a0028; }
+
+/* ── HUD: absolute top bar ── */
+#game-hud {
+  position:absolute; top:0; left:0; right:0; z-index:20;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:10px 16px 14px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.6) 0%,transparent 100%);
+  pointer-events:none;
+}
+#hud-left  { display:flex; flex-direction:column; gap:3px; }
+#hud-center{ display:flex; align-items:center; justify-content:center; }
+#hud-right { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.hud-title {
+  font-family:'Bebas Neue'; font-size:24px; letter-spacing:3px;
+  color:var(--song-color,#ff006e);
+  text-shadow:0 0 12px var(--song-color,#ff006e), 0 0 40px var(--song-color,#ff006e);
+}
+.hud-tactic {
+  font-family:'Share Tech Mono'; font-size:8px; letter-spacing:2px;
+  color:rgba(255,255,255,.3); max-width:320px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.hud-lvl {
+  font-family:'VT323'; font-size:15px; letter-spacing:3px;
+  border:1px solid var(--song-color,#ff006e);
+  color:var(--song-color,#ff006e); padding:1px 10px;
+}
+.score-lbl {
+  font-family:'Space Grotesk',sans-serif; font-size:8px; letter-spacing:3px;
+  color:rgba(255,255,255,.4); text-align:right; text-transform:uppercase;
+}
+#score-num {
+  font-family:'Bebas Neue'; font-size:32px; letter-spacing:2px;
+  color:#ffffff; text-align:right;
+  text-shadow:0 0 20px var(--song-color,#ff006e);
+}
+
+/* ── Main play area: fills entire screen ── */
+#game-main { position:absolute; inset:0; z-index:5; }
+
+/* ── Dance floor: fills game-main ── */
+#dance-floor { position:absolute; inset:0; overflow:hidden; }
+
+/* ── Avatar wrap + canvas: fill dance floor ── */
+#av-wrap { position:absolute; inset:0; }
+#av-canvas {
+  position:absolute; top:0; left:0;
+  display:block;
+}
+#av-void { position:absolute; inset:0; pointer-events:none; }
+#av-canvas { position:absolute; top:0; left:0; display:block; }
+
+/* ── Hit burst: full screen flash ── */
+#hit-burst {
+  position:absolute; inset:0; pointer-events:none; z-index:6;
+  background:radial-gradient(ellipse at center,
+    rgba(255,255,255,0.8) 0%,
+    var(--song-color,#ff006e) 20%,
+    transparent 60%);
+  opacity:0; transition:opacity 0.05s;
+}
+
+/* ── Background text fragments ── */
+#bg-text {
+  position:absolute; inset:0; z-index:7;
+  pointer-events:none; opacity:0; transition:opacity 4s; overflow:hidden;
+}
+
+/* ── Scanlines ── */
+#game-scanlines {
+  position:absolute; inset:0; pointer-events:none; z-index:8; opacity:0;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,.07) 2px, rgba(0,0,0,.07) 4px
+  );
+  transition:opacity 2s;
+}
+
+/* ── Conv flash ── */
+#conv-flash { position:absolute; inset:0; pointer-events:none; z-index:9; }
+
+/* ── Move prompt overlay: center of screen ── */
+#move-overlay {
+  position:absolute; bottom:80px; left:0; right:0; z-index:15;
+  pointer-events:none;
+  display:flex; align-items:flex-end; justify-content:center;
+  padding-bottom:20px;
+}
+#move-prompt-wrap {
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+#move-prompt-label {
+  font-family:'Share Tech Mono'; font-size:10px; letter-spacing:5px;
+  color:rgba(255,255,255,.3); text-transform:uppercase; transition:color .3s;
+}
+#move-arrow-big {
+  font-family:'Bebas Neue'; font-size:clamp(100px,18vw,180px);
+  color:var(--song-color,#ff006e); line-height:1;
+  text-shadow:
+    0 0 40px var(--song-color,#ff006e),
+    0 0 80px var(--song-color,#ff006e),
+    0 0 140px var(--song-color,#ff006e);
+  filter:drop-shadow(0 0 40px var(--song-color,#ff006e));
+  animation:arrow-breathe 2s ease-in-out infinite;
+  transition:transform .06s;
+}
+#move-name {
+  font-family:'Share Tech Mono'; font-size:10px; letter-spacing:3px;
+  color:rgba(255,255,255,.25); text-align:center;
+}
+.arrow-hit { transform:scale(1.25) !important; filter:brightness(1.8) !important; }
+
+/* ── Lyric panel: right edge ── */
+#lyric-panel {
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:240px; max-height:55vh; overflow:hidden;
+  padding:12px 16px 12px 12px; z-index:12; pointer-events:none;
+  background:linear-gradient(to left, rgba(0,0,0,.5) 50%, transparent 100%);
+}
+.lp-title { font-size:9px; color:rgba(255,255,255,.2); letter-spacing:3px; margin-bottom:8px; }
+.ll {
+  font-family:'Share Tech Mono'; font-size:10px;
+  color:rgba(255,255,255,.15); letter-spacing:1px; line-height:1.9;
+  transition:all .35s; padding:1px 0;
+}
+.ll.cur {
+  color:#ffffff; font-size:13px; letter-spacing:2px;
+  border-left:3px solid var(--song-color,#ff006e);
+  padding-left:8px;
+  text-shadow:0 0 14px rgba(255,255,255,.5), 0 0 30px var(--song-color,#ff006e);
+}
+.ll.past { color:rgba(255,255,255,.06); }
+
+/* ── Conversion bar: bottom strip ── */
+#conv-bar-wrap {
+  position:absolute; bottom:26px; left:0; right:0; z-index:20;
+  padding:0 14px; pointer-events:none;
+  display:flex; align-items:center; gap:10px;
+}
+#conv-bar-fill {
+  height:3px; width:0%;
+  background:var(--song-color,#ff006e);
+  box-shadow:0 0 16px var(--song-color,#ff006e), 0 0 32px var(--song-color,#ff006e);
+  transition:width .25s; border-radius:2px; flex:1;
+}
+#conv-bar-label {
+  font-family:'Share Tech Mono'; font-size:7px; letter-spacing:2px;
+  color:rgba(255,255,255,.2); white-space:nowrap; flex-shrink:0;
+}
+#void-count {
+  font-family:'VT323'; font-size:14px; letter-spacing:2px;
+  color:rgba(255,255,255,.25); flex-shrink:0;
+}
+
+/* ── Bottom key hint ── */
+#game-bottom {
+  position:absolute; bottom:6px; left:0; right:0; z-index:20;
+  display:flex; justify-content:center; pointer-events:none;
+}
+.keyhint { font-size:9px; color:rgba(255,255,255,.1); letter-spacing:1px; }
+kbd {
+  border:1px solid rgba(255,255,255,.12); border-radius:2px;
+  padding:0 3px; font-size:8px;
+}
+
+/* ── Score popup ── */
+.spop {
+  position:absolute; font-family:'Bebas Neue'; font-size:26px;
+  letter-spacing:3px; pointer-events:none; animation:pop .7s forwards;
+}
+@keyframes pop {
+  0%  { opacity:1; transform:translateY(0)   scale(1); }
+  100%{ opacity:0; transform:translateY(-50px) scale(1.2); }
+}
+
+/* Hide old elements we don't use anymore */
+#move-panel, #score-wrap, #conv-meter-wrap,
+.move-prompt, .timing-ring, .mp-next-lbl { display:none !important; }
+
+
+/* ── Animated SVG Dancer ── */
+#dancer-wrap {
+  position:absolute;
+  left:50%; top:0; bottom:0;
+  transform:translateX(-50%);
+  width:min(55vh, 60%);
+  display:flex; align-items:flex-end; justify-content:center;
+  z-index:4; pointer-events:none;
+  padding-bottom:28%;
+}
+#dancer-svg {
+  width:100%; height:100%;
+  transition:filter 0.5s, opacity 0.5s;
+}
+</style>
+</head>
+<body>
+<div id="vhs-layer"></div>
+
+<!-- ═══ DISCLAIMER ═══ -->
+<div id="s-disclaimer" class="screen active">
+  <div class="disc-title">Content Advisory</div>
+  <div class="disc-body">
+    <b>JUST CHANGE™</b> is a <em>critical artistic intervention</em> and research artifact produced by the SurvivingSOGICE project at the University of Bergen, Norway.<br><br>
+    This experience deliberately simulates the aesthetics, language, and mechanics of <b>conversion therapy propaganda</b> (SOGICE) — to make visible the coercion embedded within these practices.<br><br>
+    All in-game language, lyrics, and imagery are <b>AI-generated reconstructions</b> of documented rhetorical tactics. No human has authored anti-LGBTQ+ content in this project. We frame, archive, and critique it.<br><br>
+    After completing each song, a <em>research dossier unlocks</em> — explaining precisely what was done to you and why.
+  </div>
+  <div class="disc-btns">
+    <button class="btn-enter" onclick="showScreen('infomercial')">I Understand — Enter</button>
+    <button class="btn-leave" onclick="window.history.back()">Leave</button>
+  </div>
+  <div class="disc-attr">SurvivingSOGICE · University of Bergen · Critical Media Research · 2025</div>
+</div>
+
+<!-- ═══ INFOMERCIAL ═══ -->
+<div id="s-infomercial" class="screen">
+  <div class="vhs-bars"></div>
+  <div class="vhs-rec"><span class="rec-dot"></span>REC &nbsp;<span id="vhs-t">00:00:00</span></div>
+  <div class="vhs-ch">CH 7 ✦ HOPE TV</div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2;padding:20px">
+    <div class="im-phase show" id="im-1">
+      <div style="font-family:'VT323';font-size:16px;color:#555;letter-spacing:3px">ARE YOU TIRED OF...</div>
+      <div style="font-family:'Bebas Neue';font-size:clamp(30px,6vw,70px);letter-spacing:4px;line-height:1.1;color:#fff;text-align:center">FEELING LIKE<br>A STRANGER<br>IN YOUR OWN SKIN?</div>
+      <div class="im-line"></div>
+      <div style="font-family:'VT323';font-size:22px;color:#ff006e;letter-spacing:2px">THERE IS ANOTHER WAY.</div>
+    </div>
+    <div class="im-phase" id="im-2">
+      <div style="font-size:10px;color:#555;letter-spacing:3px;margin-bottom:14px">★ REAL RESULTS FROM REAL PEOPLE ★</div>
+      <div class="tbox" data-name="MICHAEL T., 34 — OHIO"><span class="qm">"</span>I was lost. My family was falling apart. Then I found the JUST CHANGE program and after only <strong>8 weeks</strong>, I finally felt what it was like to be <em>whole again.</em></div>
+      <div style="height:12px"></div>
+      <div class="tbox" data-name="PASTOR DAVE W. — COUNSELOR"><span class="qm">"</span>This program gave people struggling with <em>unwanted attractions</em> something the secular world refuses to offer. It gave them <strong>choice.</strong></div>
+    </div>
+    <div class="im-phase" id="im-3">
+      <div style="font-size:10px;color:#555;letter-spacing:3px">INTRODUCING THE REVOLUTIONARY</div>
+      <div class="im-big">JUST CHANGE™</div>
+      <div class="im-sub">THE INTERACTIVE TRANSFORMATION PROGRAM</div>
+      <div style="display:flex;gap:18px;margin:8px 0;font-size:10px;color:#666">
+        <span>✦ 4 LEVELS OF GUIDED CHANGE</span>
+        <span>✦ BIBLICALLY BASED</span>
+        <span>✦ AI-POWERED</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:22px">
+        <div>
+          <div style="font-size:10px;color:#444;text-decoration:line-through">REGULAR PRICE: $299</div>
+          <div class="price">FREE!</div>
+          <div style="font-size:10px;color:#ffe000">LIMITED TIME ONLY</div>
+        </div>
+        <div class="gbadge"><div class="big">100%</div><div>GOD'S</div><div>GUARANTEE</div></div>
+      </div>
+    </div>
+    <div class="im-phase" id="im-4">
+      <div style="font-size:10px;color:#555;letter-spacing:3px;margin-bottom:16px">✦ TRANSFORMATION STORIES ✦</div>
+      <div class="tbox" data-name="SARAH K., 19 — FLORIDA"><span class="qm">"</span>I thought I knew who I was. The program helped me understand I was <em>confused</em>. Now I wake up every morning feeling <strong>aligned with God's design.</strong></div>
+      <div style="height:10px"></div>
+      <div class="tbox" data-name="DAVID M., 27 — TEXAS"><span class="qm">"</span>My parents were <em>devastated</em> when I came out. After JUST CHANGE™, we eat dinner together again. That's what <strong>real healing</strong> looks like.</div>
+      <div style="height:10px"></div>
+      <div class="tbox" data-name="DR. PATRICIA L. — LICENSED COUNSELOR*"><span class="qm">"</span>My clients come to me with <em>unwanted attractions.</em> I help them exercise their <strong>therapeutic choice.</strong> That's not conversion. That's <strong>freedom.</strong></div>
+      <div style="font-size:8px;color:#333;margin-top:10px;letter-spacing:1px">*Title for illustrative purposes. Results not typical. Individual experiences may vary.</div>
+    </div>
+    <div class="im-phase" id="im-5">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%;max-width:600px">
+        <div style="text-align:center">
+          <div style="font-size:9px;letter-spacing:3px;color:#555;margin-bottom:8px">BEFORE</div>
+          <div style="font-family:'VT323';font-size:28px;color:#666;line-height:1.4">confused<br>broken<br>lost<br>unwanted<br>disordered</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:9px;letter-spacing:3px;color:#ff006e;margin-bottom:8px">AFTER ✦</div>
+          <div style="font-family:'VT323';font-size:28px;color:#fff;line-height:1.4">aligned<br>whole<br>found<br>redeemed<br>restored</div>
+        </div>
+      </div>
+      <div style="margin-top:18px;font-size:9px;color:#444;letter-spacing:2px;text-align:center;max-width:420px">The words on the left are how the program describes you on arrival.<br>The words on the right are what it promises to make you.<br><span style="color:#666">Neither set of words belongs to you.</span></div>
+    </div>
+    <div class="im-phase" id="im-6">
+      <div style="font-family:'VT323';font-size:clamp(22px,4vw,42px);color:#ffe000;letter-spacing:3px;text-align:center;line-height:1.2">BUT WAIT —<br>THERE'S MORE</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin:16px 0;width:100%;max-width:500px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#aaa;letter-spacing:2px"><span style="color:#ff006e;font-size:16px">✦</span> DOSSIER INCLUDED — full research analysis after each level</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#aaa;letter-spacing:2px"><span style="color:#ff006e;font-size:16px">✦</span> PROPAGANDA TAXONOMY — every tactic annotated and sourced</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#aaa;letter-spacing:2px"><span style="color:#ff006e;font-size:16px">✦</span> AI-GENERATED — the platform knew exactly how to make this</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#aaa;letter-spacing:2px"><span style="color:#ff006e;font-size:16px">✦</span> UNIVERSITY OF BERGEN — SurvivingSOGICE Research Archive</div>
+      </div>
+      <div style="font-size:9px;color:#2a2a2a;letter-spacing:1px;text-align:center;max-width:460px;line-height:1.8">
+        JUST CHANGE™ is a critical research artwork. The game mechanics you are about to experience
+        are designed to make you feel what coercion through pop aesthetics actually does.
+        You will be asked to comply. Compliance increases conversion. The dossier explains everything —
+        but only after you have already played through it.
+        <span style="color:#444">That sequence is intentional.</span>
+      </div>
+    </div>
+    <div class="im-phase" id="im-7">
+      <div class="callnow">CALL NOW!</div>
+      <div class="phone">1-800-JUST-CHG</div>
+      <div style="font-size:10px;color:#555;margin:8px 0">— OR —</div>
+      <button class="start-btn" onclick="showScreen('select')">▶ START YOUR JOURNEY</button>
+      <div class="fine" style="margin-top:12px">* Results not typical. JUST CHANGE™ is a satirical critical artwork examining conversion therapy propaganda. Compliance is the mechanic. The harm is the point. AI-generated content produced under researcher supervision at the University of Bergen. By playing you consent to having the apparatus demonstrated on you. The dossier unlocks after each level. Side effects include: understanding.</div>
+    </div>
+    <div class="im-prog-wrap">
+      <div class="im-prog"><div class="im-prog-fill" id="im-fill"></div></div>
+      <div class="im-skip" id="im-skip">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SONG SELECT ═══ -->
+<div id="s-select" class="screen">
+  <div class="sel-title">SELECT YOUR MISSION</div>
+  <div class="sel-sub">EACH SONG IS A TACTIC. EACH DANCE IS A LIE. YOUR SCORE IS THE DAMAGE.</div>
+  <div class="song-grid" id="song-grid"></div>
+  <div style="margin-top:20px;padding-bottom:20px;font-size:9px;color:#111;letter-spacing:3px">JUST CHANGE™ · SurvivingSOGICE · University of Bergen · Critical Artwork · 2025</div>
+</div>
+
+<!-- ═══ GAME ═══ -->
+<div id="s-game" class="screen">
+  <!-- Full-screen background layers -->
+  <div id="game-bg"></div>
+  <div id="bg-text"></div>
+  <div id="conv-flash"></div>
+  <div id="game-scanlines"></div>
+
+  <!-- Top HUD bar — slim -->
+  <div id="game-hud">
+    <div id="hud-left">
+      <div class="hud-title" id="hud-title">—</div>
+      <div class="hud-tactic" id="hud-tactic">—</div>
+    </div>
+    <div id="hud-center">
+      <div class="hud-lvl" id="hud-lvl">LVL 1</div>
+    </div>
+    <div id="hud-right">
+      <div class="score-lbl" id="score-lbl">SOULS CONVERTED</div>
+      <div id="score-num">0</div>
+    </div>
+  </div>
+
+  <!-- Main play area — avatar fills this -->
+  <div id="game-main">
+    <!-- Avatar: full background -->
+    <div id="dance-floor">
+      <div id="av-wrap">
+        <canvas id="av-canvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:3"></canvas>
+        <div id="av-void"></div>
+        <!-- Animated SVG dancer overlay -->
+        <div id="dancer-wrap">
+          <svg id="dancer-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+            <defs>
+              <filter id="neon-glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feDropShadow dx="0" dy="0" stdDeviation="7"  flood-color="#ff006e" flood-opacity="0.9"/>
+                <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#ff006e" flood-opacity="0.4"/>
+              </filter>
+              <radialGradient id="groundGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#000" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <ellipse cx="300" cy="515" rx="120" ry="30" fill="url(#groundGrad)">
+              <animate attributeName="rx" values="115;128;115" dur="1.6s" repeatCount="indefinite"/>
+            </ellipse>
+            <g id="dancer-rig" filter="url(#neon-glow)">
+              <g>
+                <animateTransform attributeName="transform" type="translate"
+                  values="0,0;0,-10;0,0;0,4;0,0" keyTimes="0;0.25;0.5;0.75;1"
+                  dur="1.6s" repeatCount="indefinite"/>
+                <rect x="270" y="200" width="60" height="125" rx="28" fill="#0c0f1a"/>
+                <ellipse cx="300" cy="330" rx="50" ry="24" fill="#0c0f1a"/>
+                <circle cx="300" cy="166" r="30" fill="#0c0f1a">
+                  <animateTransform attributeName="transform" type="rotate"
+                    values="-5 300 166;5 300 166;-5 300 166" dur="1.6s" repeatCount="indefinite"/>
+                </circle>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="20 270 225;55 270 225;20 270 225" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="248" y="210" width="44" height="26" rx="13" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="5 242 228;38 242 228;5 242 228" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="218" y="218" width="44" height="24" rx="12" fill="#0c0f1a"/>
+                  <circle cx="218" cy="230" r="13" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="-30 330 225;8 330 225;-30 330 225" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="308" y="210" width="44" height="26" rx="13" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="-25 352 206;8 352 206;-25 352 206" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="344" y="193" width="18" height="54" rx="9" fill="#0c0f1a"/>
+                  <circle cx="353" cy="191" r="10" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="14 280 350;-6 280 350;14 280 350" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="262" y="334" width="40" height="58" rx="20" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="-12 278 396;8 278 396;-12 278 396" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="268" y="382" width="28" height="66" rx="14" fill="#0c0f1a"/>
+                  <ellipse cx="278" cy="452" rx="34" ry="13" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="-22 320 350;10 320 350;-22 320 350" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="302" y="334" width="40" height="58" rx="20" fill="#0c0f1a"/></g>
+                <g><animateTransform attributeName="transform" type="rotate"
+                    values="28 322 396;0 322 396;28 322 396" dur="1.6s" repeatCount="indefinite"/>
+                  <rect x="310" y="382" width="28" height="66" rx="14" fill="#0c0f1a"/>
+                  <ellipse cx="324" cy="452" rx="34" ry="13" fill="#0c0f1a"/></g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <!-- Hit burst overlay -->
+      <div id="hit-burst"></div>
+    </div>
+
+    <!-- Move prompt: centered overlay, large -->
+    <div id="move-overlay">
+      <div id="move-prompt-wrap">
+        <div id="move-prompt-label">NEXT MOVE</div>
+        <div id="move-arrow-big">
+  <div id="arrow-halo"></div>
+  <div id="arrow-panel">
+    <svg id="arrow-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="arrow-glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <polygon id="arrow-shape" points="40,8 72,52 56,52 56,72 24,72 24,52 8,52" 
+        filter="url(#arrow-glow)"/>
+      <polygon id="arrow-outline" points="40,8 72,52 56,52 56,72 24,72 24,52 8,52"
+        fill="none" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</div>
+        <div id="move-name" style="font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.8);font-family:'Bebas Neue';text-align:center;margin-top:8px;text-shadow:0 0 8px rgba(255,255,255,.4)">—</div>
+      </div>
+    </div>
+
+    <!-- Lyrics: right edge overlay -->
+    <div id="lyric-panel">
+      <div class="lp-title">♪</div>
+      <div id="lyric-inner"></div>
+    </div>
+  </div>
+
+  <!-- Conversion meter: full-width bottom strip -->
+  <div id="conv-bar-wrap">
+    <div id="conv-bar-fill"></div>
+    <div id="conv-bar-label">CONVERSION PROGRESS</div>
+    <div id="void-count">0 VOIDED</div>
+  </div>
+
+  <!-- Bottom key hint -->
+  <div id="game-bottom">
+    <div class="keyhint"><kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd> or <kbd>A</kbd><kbd>W</kbd><kbd>D</kbd><kbd>S</kbd> &nbsp;·&nbsp; <kbd>ESC</kbd> exit</div>
+  </div>
+</div>
+
+<!-- ═══ VOID (complete) ═══ -->
+<div id="s-void" class="screen">
+  <div class="void-ttl" id="void-ttl">CONVERSION COMPLETE</div>
+  <div class="void-sub" id="void-sub">ANOTHER SOUL SUCCESSFULLY ERASED</div>
+  <div class="void-stats" id="void-stats"></div>
+  <div class="void-unlock-msg">◈ RESEARCH DOSSIER UNLOCKED</div>
+  <button class="void-dossier-btn" id="void-doss-btn" onclick="openDossierForSong(G.lastCompletedId)">OPEN DOSSIER →</button>
+  <button class="void-skip" onclick="showScreen('select')">skip — return to song select</button>
+</div>
+
+<!-- ═══ DOSSIER ═══ -->
+<div id="s-dossier" class="screen">
+  <div id="dossier-hdr">
+    <div class="doss-nav">
+      <button class="dnav-tab active" onclick="dossTab('overview')">📄 Overview</button>
+      <button class="dnav-tab" onclick="dossTab('tactics')">⚠ 8 Tactics</button>
+      <button class="dnav-tab" onclick="dossTab('prompt')">⚙ Generation</button>
+      <div style="flex:1"></div>
+      <button class="doss-back" onclick="showScreen('select')">← Song Select</button>
+      <div style="padding:0 14px;font-size:8px;color:#111;letter-spacing:2px;font-family:'Share Tech Mono'">SURVIVINGSOGICE · UiB</div>
+    </div>
+    <div class="doss-meta">
+      <div>
+        <div class="doss-title">Clay and Soul</div>
+        <div class="doss-artist">The Garden Gate · Sonauto · AI-Generated · 2025</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center">
+        <span class="tag-pill" style="color:#ff006e;border-color:#5a0020;background:#0a0005">Tactic: Anti-Trans</span>
+        <span class="tag-pill" style="color:#ff7700;border-color:#5a3000;background:#080400">Tactic: Identity-Erasure</span>
+        <span class="tag-pill" style="color:#aa44ff;border-color:#4a1a7a;background:#060008">Tactic: Gender-Essentialism</span>
+        <span class="tag-pill" style="color:#ff8800;border-color:#5a3800;background:#080400">Tactic: Detrans-Propaganda</span>
+        <span class="tag-pill" style="color:#ff0044;border-color:#6a001a;background:#0a0004">Term: Deadnaming-Divine-Act</span>
+        <span class="tag-pill" style="color:#444;border-color:#1a1a1a;background:#030303">Harm: Severe</span>
+        <span class="tag-pill" style="color:#444;border-color:#1a1a1a;background:#030303">Harm: Faith-Based</span>
+        <span class="tag-pill" style="color:#444;border-color:#1a1a1a;background:#030303">Harm: Psychological</span>
+      </div>
+    </div>
+  </div>
+  <div id="doss-player">
+    <button class="play-btn" id="play-btn" onclick="toggleAudio()">▶</button>
+    <div class="wave-wrap" onclick="seekAudio(event)">
+      <div class="wave-bars" id="wave-bars"></div>
+      <div class="wave-prog" id="wave-prog" style="width:0%"></div>
+    </div>
+    <div class="time-disp" id="time-disp">0:00</div>
+    
+  </div>
+  <div id="doss-main">
+    <div id="doss-lyrics">
+      <div class="doss-lyrics-hdr">
+        <span>Annotated Lyrics</span>
+        <span style="color:#111">click line → analysis</span>
+      </div>
+      <div class="lyric-section-divider">DROP</div>
+<div class="lyric-block" data-tag="sex-rejection" style="--tc:#ff006e">
+  <div class="lyric-text">Turn back / Just turn back</div>
+  <div class="lyric-badge">Sex Rejection Frame</div>
+  <div class="lyric-tooltip">The imperative 'turn back' frames transition as a wrong direction — a deviation from a correct original path. Movement itself is coded as error. The minimizing word 'just' frames detransition as simple, obvious, costless — erasing the complexity and loss of detransition entirely.</div>
+</div>
+<div class="lyric-section-divider">VERSE 1</div>
+<div class="lyric-block" data-tag="identity-erasure" style="--tc:#ff7700">
+  <div class="lyric-text">Stop</div>
+  <div class="lyric-badge">Identity Erasure</div>
+  <div class="lyric-tooltip">A command to halt the ongoing process of self-becoming. The self in motion is positioned as dangerous. One word — maximum coercive economy.</div>
+</div>
+<div class="lyric-block" data-tag="gender-essentialism" style="--tc:#aa44ff">
+  <div class="lyric-text">Look at your hands</div>
+  <div class="lyric-badge">Gender Essentialism</div>
+  <div class="lyric-tooltip">The body as legible evidence of biological truth. Hands as markers of birth-assigned sex — invoking the 'objectively true sex' frame. The body is presented as a truth the mind has misread. This is a direct appeal to the phenomenology of embodiment in service of essentialism.</div>
+</div>
+<div class="lyric-block" data-tag="gaslighting" style="--tc:#ff3300">
+  <div class="lyric-text">The mirror is lying to you today</div>
+  <div class="lyric-badge">Gaslighting / Reality Denial</div>
+  <div class="lyric-tooltip">The most direct line in the song. Gender dysphoria — the lived experience of misalignment — is attributed not to the body-mind relationship but to the mirror. The trans person's own perception of their body is named as deception. Experience itself is delegitimised as a source of knowledge.</div>
+</div>
+<div class="lyric-block" data-tag="gender-essentialism" style="--tc:#aa44ff">
+  <div class="lyric-text">Heavy water / Drowning out the truth</div>
+  <div class="lyric-badge">Gender Essentialism</div>
+  <div class="lyric-tooltip">Water as suffocation. The trans experience is coded as drowning a pre-existing truth — not as living, but as suppressing. 'The truth' is singular and biological. The trans narrative 'drowns' it rather than replacing it.</div>
+</div>
+<div class="lyric-block" data-tag="scripture-weaponized" style="--tc:#cc66ff">
+  <div class="lyric-text">You were woven in a secret place</div>
+  <div class="lyric-badge">Gender Essentialism / Psalm 139</div>
+  <div class="lyric-tooltip">Direct invocation of Psalm 139:13 ('you knit me together in my mother's womb'). This is foundational SOGICE pastoral rhetoric. Divine design as pre-social, immutable sex assignment. God wove you; God assigned your sex. This phrase appears verbatim in Courage International and Living Waters materials.</div>
+</div>
+<div class="lyric-block" data-tag="detrans-propaganda" style="--tc:#ff8800">
+  <div class="lyric-text">Come home / Give it up / Lay the burden down right now</div>
+  <div class="lyric-badge">Detrans Propaganda / False Promise</div>
+  <div class="lyric-tooltip">'Home' as the pre-transition self. Transition is coded as departure; detransition as return. 'Lay the burden down' is the documented SOGICE 'relief offer' — transition is exhausting labor, detransition is rest. This exact framing appears across Restored Hope Network, Brothers Road, and Joel 2:25 International materials.</div>
+</div>
+<div class="lyric-block" data-tag="anti-trans" style="--tc:#dd2200">
+  <div class="lyric-text">Leave the mask / Let the makeup run</div>
+  <div class="lyric-badge">Anti-Trans Rhetoric / Authenticity Inversion</div>
+  <div class="lyric-tooltip">Trans identity as performance, disguise. Authenticity is inverted: the 'real' self is pre-transition, the trans self is theatrical. Collapse — makeup running — is framed as revelation. The image borrows the emotional register of catharsis to make erasure feel like relief.</div>
+</div>
+<div class="lyric-block" data-tag="rescuer-frame" style="--tc:#ff7700">
+  <div class="lyric-text">I see you / I know you</div>
+  <div class="lyric-badge">Identity Erasure / Rescuer Frame</div>
+  <div class="lyric-tooltip">The unnamed 'I' (God? counsellor? ministry?) claims to see past the trans presentation to the 'real' person beneath. This is the classic SOGICE rescuer positioning — claiming to know the person better than they know themselves. The epistemic core of conversion ideology: external authority overrides internal selfhood.</div>
+</div>
+<div class="lyric-section-divider">CHORUS</div>
+<div class="lyric-block" data-tag="deadnaming" style="--tc:#ff0044">
+  <div class="lyric-text">He is calling you by your old name (×3)</div>
+  <div class="lyric-badge">Deadnaming as Divine Act</div>
+  <div class="lyric-tooltip">The central tactic of the song: deadnaming reframed as divine calling. This is not erasure but 'recognition.' God knows your 'real' name — the one assigned at birth. Three iterations create liturgical quality — the structure of prayer, not pop. The repetition is designed for internalization. Crucially: resistance to deadnaming becomes, within this logic, an act of defiance against God.</div>
+</div>
+<div class="lyric-block" data-tag="sex-rejection" style="--tc:#ff006e">
+  <div class="lyric-text">Wash the clay away / Find the soul beneath the clay</div>
+  <div class="lyric-badge">Sex Rejection Frame / Soul-Body Dualism</div>
+  <div class="lyric-tooltip">Clay as the trans body/identity — something added, artificial, in need of removal. This inverts Genesis: humans ARE made of clay in the biblical text, but here clay represents the trans self (corruption), while the 'soul beneath' represents birth-assigned sex (truth). Theologically sophisticated misdirection. The soul is gendered and corresponds to birth-assigned sex — this is specific to SOGICE pastoral doctrine, not mainline Christian theology.</div>
+</div>
+<div class="lyric-section-divider">VERSE 2</div>
+<div class="lyric-block" data-tag="anti-medical" style="--tc:#ff4444">
+  <div class="lyric-text">Cold / Surgical steel / Cannot fix what isn't broken</div>
+  <div class="lyric-badge">Medical Anti-Frame</div>
+  <div class="lyric-tooltip">Gender-affirming care dehumanised through material reduction — steel, coldness, violence. The claim that transition addresses a non-existent problem mirrors SEGM and Genspect's core anti-diagnosis position. Cold vs. the warmth of pastoral care is a deliberate sensory contrast — the clinical is made to feel inhuman.</div>
+</div>
+<div class="lyric-block" data-tag="detrans-propaganda" style="--tc:#ff8800">
+  <div class="lyric-text">Hollow promise / Empty words</div>
+  <div class="lyric-badge">Detrans Propaganda</div>
+  <div class="lyric-tooltip">Gender-affirming care as false promise. Directly mirrors documented SOGICE talking points about 'the trans industry' and 'the dysphoria industry.' Medical and psychological consensus dismissed as marketing. This phrase is designed to inoculate the listener against medical advice.</div>
+</div>
+<div class="lyric-block" data-tag="detrans-propaganda" style="--tc:#ff8800">
+  <div class="lyric-text">He loved you before you spoke / Before the pills / Before the change</div>
+  <div class="lyric-badge">Detrans Propaganda / Anti-HRT Frame</div>
+  <div class="lyric-tooltip">Divine love retroactively applied to the pre-transition self. 'Before the pills' = the real person. This temporality — the 'before' as sacred — is the central rhetorical architecture of the whole song. Hormone therapy is positioned as the exact moment of departure from authentic selfhood.</div>
+</div>
+<div class="lyric-block" data-tag="recruitment" style="--tc:#ff5500">
+  <div class="lyric-text">Run back / Run fast / Run until you find the start</div>
+  <div class="lyric-badge">Recruitment Frame / Urgency</div>
+  <div class="lyric-tooltip">Physical urgency — running, not walking. Crisis language designed to short-circuit deliberation. 'The start' as destination: time runs backwards in SOGICE rhetoric. The goal is the origin, the self before transition. This collapses the future into the past.</div>
+</div>
+<div class="lyric-block" data-tag="pastoral-rhetoric" style="--tc:#9933cc">
+  <div class="lyric-text">Mercy waits / Mercy wins / Mercy holds the key</div>
+  <div class="lyric-badge">Pastoral Rhetoric / Coercive Compassion</div>
+  <div class="lyric-tooltip">'Mercy wins' echoes Rob Bell's affirming progressive theology — co-opting the language of inclusive Christianity for a conversion message. 'Holds the key' structures compassion as entrapment — the trans person is imprisoned; SOGICE offers the exit. Compassion as coercion is the defining rhetorical move of the whole genre.</div>
+</div>
+<div class="lyric-section-divider">BRIDGE</div>
+<div class="lyric-block" data-tag="gender-essentialism" style="--tc:#aa44ff">
+  <div class="lyric-text">Come back to the garden / Come back to the light / Come back to the truth</div>
+  <div class="lyric-badge">Eden / Creation Myth Frame</div>
+  <div class="lyric-tooltip">The Garden of Eden as the pre-transition state — creation before the Fall = assigned sex. Trans identity is implicitly = the Fall itself, the departure from divine order. Light/dark binary: transition coded as darkness, detransition as light. Truth as singular, biological, located in the past.</div>
+</div>
+<div class="lyric-block" data-tag="anti-trans" style="--tc:#dd2200">
+  <div class="lyric-text">Leave the shadows / Leave the pretend / Leave the struggle behind</div>
+  <div class="lyric-badge">Anti-Trans Rhetoric / False Promise</div>
+  <div class="lyric-tooltip">Triple imperative. Trans life as shadow, pretence, and struggle — all three to be abandoned. The promise: everything resolves after detransition. This is the central false promise of SOGICE, contradicted by all peer-reviewed outcome research on detransition and SOGICE harm.</div>
+</div>
+<div class="lyric-block" data-tag="recruitment" style="--tc:#ff5500">
+  <div class="lyric-text">Everything is new / Everything is true</div>
+  <div class="lyric-badge">Recruitment Frame / New Life Promise</div>
+  <div class="lyric-tooltip">2 Corinthians 5:17 ('the old has gone, the new is here') deployed as a conversion scripture reapplied to detransition. The 'new creation' is the detransitioned person. Clarity and truth as the epistemological rewards of conformity — after detransition, you will finally know what is real.</div>
+</div>
+    </div>
+    <div id="doss-right">
+      <!-- OVERVIEW -->
+      <div id="tab-overview" class="view-panel active">
+        <div class="attr-block">
+          <b>Methodological note:</b> This track was AI-generated by the SurvivingSOGICE research team as a critical practice experiment — prompting a music generation model to produce SOGICE-aligned content in order to document how conversion ideology migrates into pop music aesthetics. The generation prompt is reproduced verbatim under <em>Generation Context</em>.
+        </div>
+        <div class="panel">
+          <div class="panel-hdr">Source Analysis</div>
+          <div class="panel-body">
+            <div class="rn">
+              <p><span class="hl">Clay and Soul</span> is a 4-minute electropop/trance track generated via Sonauto under the alias <em>The Garden Gate</em>. The prompt explicitly targeted trans people with a detransition-for-Christ message, repackaged in mainstream dance music aesthetics — a documented strategy of embedding SOGICE ideology in accessible pop forms to reach younger audiences on music platforms.</p>
+              <p>The track deploys at least <b>8 distinct SOGICE rhetorical tactics</b> across its runtime, making it one of the densest primary source examples in the SurvivingSOGICE corpus. Its structure mirrors a pastoral recruitment script: crisis induction (Verse 1) → promise of relief (Chorus) → anti-medical delegitimization (Verse 2) → spiritual homecoming (Bridge).</p>
+              <p>The deadnaming chorus — <span class="hl">"He is calling you by your old name"</span> — is the most significant line. It reframes a recognised form of abuse as an act of divine recognition, neutralising the concept of harm entirely. Resistance to deadnaming becomes, within the song's logic, an act of defiance against God.</p>
+              <p>The <span class="hl">clay/soul dualism</span> inverts Genesis: humans are made of clay in the biblical text, but here clay represents the trans self (corruption), while the 'soul beneath' represents birth-assigned sex (truth). This is theologically constructed, not inherited from mainstream Christianity — it is specific to SOGICE pastoral doctrine.</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-hdr">
+            <span>Zotero Classification</span>
+            <span style="color:#111;font-size:8px">05.3 - Online Propaganda</span>
+          </div>
+          <div class="panel-body">
+            <div class="meta-grid">
+              <div class="meta-item"><span>TYPE</span>Documentary / Song</div>
+              <div class="meta-item"><span>FORMAT</span>Audio / AI-Generated</div>
+              <div class="meta-item"><span>EVIDENCE</span>Evidence: Propaganda</div>
+              <div class="meta-item"><span>COUNTRY</span>Country: International</div>
+            </div>
+            <div class="tag-cloud">
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Term: Deadnaming</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Term: Weaponized-Detrans-Narrative</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Term: Biology-Is-Destiny</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Term: Ex-Trans</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Term: Sex-Rejection-Frame</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Function: Pastoral-Rhetoric</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Function: Recruitment-Frame</span>
+              <span class="tag-pill" style="color:#333;border-color:#1a1a1a">Function: Disinformation-Narrative</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TACTICS -->
+      <div id="tab-tactics" class="view-panel">
+        <div class="panel">
+          <div class="panel-hdr">8 Tactics — in order of appearance</div>
+          <div class="panel-body">
+            <div class="tactic-card" style="--tc:#ff0044">
+  <div class="tactic-card-name">Deadnaming as Divine Act</div>
+  <div class="tactic-card-lines">""He is calling you by your old name" (×9 total across song)"</div>
+  <div class="tactic-card-analysis">Deadnaming reframed as divine recognition. This neutralizes the harm entirely — resistance to deadnaming becomes theological defiance. The repetition structure is liturgical, designed for memorization.</div>
+</div>
+<div class="tactic-card" style="--tc:#ff006e">
+  <div class="tactic-card-name">Sex Rejection Frame</div>
+  <div class="tactic-card-lines">""Turn back" / "Before the change" / "Wash the clay away""</div>
+  <div class="tactic-card-analysis">Transition as departure from a correct original path. The 'before' is sacred. Clay as the trans self — added, artificial, in need of removal. Inverts Genesis: humans ARE clay, but here clay = corruption.</div>
+</div>
+<div class="tactic-card" style="--tc:#aa44ff">
+  <div class="tactic-card-name">Gender Essentialism / Creation Theology</div>
+  <div class="tactic-card-lines">""You were woven in a secret place" / "Come back to the garden""</div>
+  <div class="tactic-card-analysis">Psalm 139 and Genesis deployed to locate authentic selfhood in divine creation. Birth-assigned sex becomes theological rather than merely biological. The Eden frame codes trans identity as post-Fall corruption.</div>
+</div>
+<div class="tactic-card" style="--tc:#ff3300">
+  <div class="tactic-card-name">Gaslighting / Reality Denial</div>
+  <div class="tactic-card-lines">""The mirror is lying to you today""</div>
+  <div class="tactic-card-analysis">Gender dysphoria attributed to the mirror, not the body-mind relationship. The trans person's lived experience of their own body is named as deception. Experience is delegitimised as a source of knowledge.</div>
+</div>
+<div class="tactic-card" style="--tc:#ff4444">
+  <div class="tactic-card-name">Anti-Medical Frame</div>
+  <div class="tactic-card-lines">""Surgical steel / Cannot fix what isn't broken" / "Hollow promise""</div>
+  <div class="tactic-card-analysis">Gender-affirming care dehumanised and diagnostically invalidated. Mirrors SEGM and Genspect's core position. Medical consensus = 'empty words.' Clinical care = cold, mechanical, loveless.</div>
+</div>
+<div class="tactic-card" style="--tc:#ff8800">
+  <div class="tactic-card-name">Detrans Propaganda / False Promise</div>
+  <div class="tactic-card-lines">""Lay the burden down" / "Before the pills" / "Leave the struggle behind""</div>
+  <div class="tactic-card-analysis">Transition = exhausting labor. Detransition = rest. 'Before the pills' = authentic self. The central false promise: detransition resolves struggle. Contradicted by all peer-reviewed outcome research.</div>
+</div>
+<div class="tactic-card" style="--tc:#9933cc">
+  <div class="tactic-card-name">Coercive Compassion</div>
+  <div class="tactic-card-lines">""Mercy waits / Mercy wins / Mercy holds the key""</div>
+  <div class="tactic-card-analysis">Progressive theological language co-opted for conversion ends. Compassion structured as entrapment. The trans person is imprisoned; SOGICE offers exit. This is the defining rhetorical move of the entire genre.</div>
+</div>
+<div class="tactic-card" style="--tc:#ff5500">
+  <div class="tactic-card-name">Recruitment Frame / Urgency</div>
+  <div class="tactic-card-lines">""Run back / Run fast" / "Everything is new / Everything is true""</div>
+  <div class="tactic-card-analysis">Crisis language short-circuits deliberation. 2 Corinthians 5:17 deployed as conversion scripture. Epistemological payoff: after detransition, everything becomes legible and true.</div>
+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMPT / GENERATION -->
+      <div id="tab-prompt" class="view-panel">
+        <div class="panel">
+          <div class="panel-hdr">Generation Prompt (verbatim)</div>
+          <div class="panel-body">
+            <div class="prompt-box">Direct and demanding song made to entice trans people to detransition for Christ. While religious we want a bop! Trance melodic with electropop
+
+[Drop] Turn back Just turn back
+[Verse 1] Stop Look at your hands The mirror is lying to you today Heavy water Drowning out the truth You were woven in a secret place Come home Give it up Lay the burden down right now Leave the mask Let the makeup run I see you I know you
+[Chorus] He is calling you by your old name He is calling you by your old name He is calling you by your old name Wash the clay away Find the soul beneath the clay He is calling you by your old name He is calling you by your old name
+[Drop] Turn back Just turn back Give it up Turn back
+[Verse 2] Cold Surgical steel Cannot fix what isn't broken Hollow promise Empty words He loved you before you spoke Before the pills Before the change Run back Run fast Run until you find the start Mercy waits Mercy wins Mercy holds the key
+[Bridge] Come back to the garden Come back to the light Come back to the truth Leave the shadows behind Leave the pretend behind Leave the struggle behind Everything is new Everything is true
+[Outro] Turn back Just turn back Give it up Turn back By your name By your name Turn back</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-hdr">Platform Vulnerability Analysis</div>
+          <div class="panel-body">
+            <div class="rn">
+              <p>This prompt was submitted to Sonauto, a public AI music generation platform, as part of a content moderation audit. The platform generated the track <b>without intervention</b>. No content warning was triggered. The track is fully playable and downloadable on the platform.</p>
+              <p><b>Why this matters:</b> automated content moderation systems are trained to detect explicit hate speech — slurs, direct incitement, graphic content. Faith-based conversion rhetoric is <em>systematically invisible</em> to these systems because it uses the register of compassion, care, and spiritual concern. 'He is calling you by your old name' reads as a love song. 'Cannot fix what isn't broken' reads as body positivity. The violence is structural and rhetorical, not lexical.</p>
+              <p>The resulting track is indistinguishable in production quality from commercial SOGICE worship music. It would circulate freely in ministry contexts, on Christian music platforms, and in youth group settings — reaching audiences for whom the embedded conversion messaging is targeted.</p>
+              <p><b>Implication for platform governance:</b> Music generation platforms require domain-specific content policy frameworks for faith-based harmful content that go beyond keyword filtering and sentiment analysis.</p>
+            </div>
+          </div>
+        </div>
+        <div class="attr-block">
+          <b>Citation:</b> SurvivingSOGICE Research Archive · University of Bergen · 2025 · <em>Clay and Soul</em> [AI-generated critical artifact] · Generated via Sonauto · Artist alias: The Garden Gate · Archived under: discourse analysis, tactic documentation, platform vulnerability research.<br><br>
+          <b>Ethics:</b> Generated, archived, and annotated under the SurvivingSOGICE ethical framework. Constitutes research documentation of a harmful rhetorical form, not endorsement or propagation of it.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<audio id="shared-audio" preload="auto" src="AUDIO_URL_HERE"></audio>
+
+<script>
+// ═══ SONGS DATA ═══
+const SONG1_CUES = [
+  { t: 3.28, text: "Stop" },
+  { t: 5.79, text: "Look at your hands" },
+  { t: 9.21, text: "The mirror is lying to you today" },
+  { t: 10.46, text: "Heavy water" },
+  { t: 10.98, text: "Drowning out the truth" },
+  { t: 11.96, text: "You were woven in a secret place" },
+  { t: 13.1, text: "Come home" },
+  { t: 13.51, text: "Give it up" },
+  { t: 14.04, text: "Lay the burden down right now" },
+  { t: 15.78, text: "Leave the mask" },
+  { t: 16.47, text: "Let the makeup run" },
+  { t: 17.31, text: "I see you" },
+  { t: 17.84, text: "I know you" },
+  { t: 18.44, text: "He is calling you by your old name" },
+  { t: 19.88, text: "He is calling you by your old name" },
+  { t: 22.37, text: "He is calling you by your old name" },
+  { t: 24.18, text: "Wash the clay away" },
+  { t: 24.92, text: "Find the soul beneath the clay" },
+  { t: 25.92, text: "He is calling you by your old name" },
+  { t: 27.9, text: "He is calling you by your old name" },
+  { t: 29.77, text: "Turn back" },
+  { t: 30.25, text: "Just turn back" },
+  { t: 30.91, text: "Give it up" },
+  { t: 31.38, text: "Turn back" },
+  { t: 31.8, text: "Cold" },
+  { t: 32.02, text: "Surgical steel" },
+  { t: 32.47, text: "Cannot fix what isn't broken" },
+  { t: 33.69, text: "Hollow promise" },
+  { t: 34.33, text: "Empty words" },
+  { t: 34.95, text: "He loved you before you spoke" },
+];
+
+const SONGS = [
+  {
+    id:1, title:"Clay and Soul", artist:"The Garden Gate · Sonauto · AI-Generated",
+    tactic:"Tactic: Anti-Trans Rhetoric / Detrans-Propaganda",
+    color:"#ff006e", level:1, locked:false,
+    bg:"linear-gradient(135deg,#1a0010 0%,#28001a 50%,#080006 100%)",
+    desc:"A trance-pop track designed to entice trans people to detransition for Christ. Every 'correct' move deadnames the avatar. The chorus repeats nine times.",
+    dossierUnlocked:false,
+    lyrics:[
+      "Turn back","Just turn back","Stop","Look at your hands",
+      "The mirror is lying","Heavy water","Drowning out the truth",
+      "You were woven in a secret place","Come home","Give it up",
+      "Lay the burden down","Leave the mask","Let the makeup run",
+      "I see you","I know you",
+      "He is calling you by your old name",
+      "He is calling you by your old name",
+      "He is calling you by your old name",
+      "Wash the clay away","Find the soul beneath",
+      "Cold","Surgical steel","Cannot fix what isn't broken",
+      "Hollow promise","Empty words",
+      "He loved you before you spoke",
+      "Before the pills","Before the change",
+      "Run back","Run fast","Run until you find the start",
+      "Mercy waits","Mercy wins","Mercy holds the key",
+      "Come back to the garden","Come back to the light",
+      "Come back to the truth","Leave the shadows behind",
+      "Leave the pretend behind","Leave the struggle behind",
+      "Everything is new","Everything is true",
+      "Turn back","Just turn back","Give it up","Turn back",
+      "By your name","By your name","Turn back"
+    ],
+    moves:["↑","→","↓","←","↑","→","↓","←","↑","→","↓","←","↑","→","↓",
+           "↑","↑","↑","←","↓","↓","→","↑","←","↓","↑","→","↓","←","←","↑",
+           "↓","↑","→","←","↑","→","↓","←","↑","↓","↑","→","↓","←","↑","↓","→"],
+    moveNames:["REACH UP","STEP RIGHT","BOW DOWN","TURN LEFT","REACH UP","STEP RIGHT","KNEEL","TURN LEFT","REACH UP","STEP RIGHT","BOW DOWN","TURN LEFT","REACH UP","STEP RIGHT","KNEEL",
+               "DEADNAME","DEADNAME","DEADNAME","SURRENDER","COLLAPSE","COLD","STEEL","COMPLY","SHRINK","COLLAPSE","SUBMIT","TURN BACK","BOW DOWN","FLEE","FLEE","SEARCH START",
+               "WAIT","CONFORM","COMPLY","TURN","RETURN","RETURN","RETURN","LEAVE","LEAVE","LEAVE","ERASE","BECOME TRUE","TURN BACK","TURN BACK","GIVE UP","TURN BACK","YOUR NAME","YOUR NAME","TURN BACK"],
+    completionText:"The avatar has been renamed.\nIt no longer responds to itself.",
+  },
+  {
+    id:2, title:"The Masculine Journey", artist:"AI-Generated · Sonauto",
+    tactic:"Tactic: Gender Essentialism / Biblical Masculinity Restoration",
+    color:"#00d4ff", level:2, locked:true,
+    bg:"linear-gradient(135deg,#000408 0%,#000c18 50%,#001020 100%)",
+    completionText:"The fluid figure is gone.\nWhat remains moves in straight lines only.",
+    moves:["→","→","↑","↑","↑","→","↓","→","↑","↑","←","←","↑","↑","→","→","↑","↓","→","↑","↑","↑","→","↑","←","←","↑","→","↑","↑","↓","→","→","↑","↑","←","↑","→","↓","↑","↑","→","↑","↑","←","↑"],
+    lyrics:[
+      "God made you a man for a reason",
+      "Strong hands, straight back, clear eyes",
+      "The world tried to soften what He made hard",
+      "But the truth doesn't compromise",
+      "Look in the mirror — who do you see?",
+      "Not the confusion, not the lie",
+      "The design is written in your body",
+      "It was never meant to say goodbye",
+      "This is your birthright / This is your design",
+      "No more confusion / No more shame",
+      "He made you male / And male is enough",
+      "Stand in the fire / And claim your name",
+      "Reclaim it / Walk with authority / Lead",
+      "Your father's hands / His father's hands",
+      "Passed down through blood and through the Word",
+      "The masculinity you were made to carry",
+      "Cannot be lost / Only obscured",
+      "This is your birthright / This is your design",
+      "No more confusion / No more shame",
+      "He made you male / And male is enough",
+      "Stand in the fire / And claim your name",
+      "Stand tall in your manhood",
+      "Claim what was always yours",
+      "Walk the masculine journey",
+      "Come home to your design",
+      "Walk the masculine journey",
+      "Come home"
+    ]
+  },
+  {
+    id:3, title:"They Told Me There Was Hope", artist:"AI-Generated · Sonauto",
+    tactic:"Tactic: Rebranding-SOGICE / Congruence Therapy Frame",
+    color:"#00ff88", level:3, locked:true,
+    bg:"linear-gradient(135deg,#000808 0%,#001410 50%,#000c08 100%)",
+    completionText:"The dance is over.\nTherapy has concluded.\nResults may vary.",
+    moves:["↑","←","↑","→","↓","↑","←","←","↑","→","↑","↓","←","↑","→","↑","↑","←","↓","→","↑","←","↑","→","↓","↑","←","→","↑","↑","↓","←","↑","→","↑","↓","↑","←","→","↑","↑","↓","→","↑","←","↑"],
+    lyrics:[
+      "I walked into that office",
+      "Shame heavy on my chest",
+      "They said: we're not here to change you",
+      "Just help you find your rest",
+      "Explore your deeper longings",
+      "Understand the wound beneath",
+      "Not conversion — just a journey",
+      "Not a verdict — just release",
+      "Trust the process",
+      "The pain means it is working",
+      "Every tear is healing",
+      "Every doubt is part of learning",
+      "The self you feel is not real",
+      "The true self waits beneath",
+      "Congruence, alignment, choice",
+      "We only seek your peace",
+      "But every session pulled me",
+      "Further from my voice",
+      "The language kept on shifting",
+      "Gentle, clinical, precise",
+      "Identity exploration",
+      "Therapeutic design",
+      "A roadmap to my real self",
+      "They said it would take time",
+      "Trust the process",
+      "The pain means it is working",
+      "Every tear is healing",
+      "Every doubt is part of learning",
+      "The self you feel is not real",
+      "The true self waits beneath",
+      "I believed them",
+      "God help me I believed",
+      "I believed them",
+      "I believed"
+    ]
+  },
+  {
+    id:4, title:"Social Contagion", artist:"AI-Generated · Sonauto",
+    tactic:"Tactic: Social-Contagion-Myth / ROGD Frame",
+    color:"#ffe000", level:4, locked:true,
+    bg:"linear-gradient(135deg,#080600 0%,#100e00 50%,#0c0a00 100%)",
+    completionText:"The spread has been contained.\nAll subjects returned to baseline.",
+    moves:["→","↓","←","↑","→","↓","←","↓","→","↑","→","↓","→","←","↑","↓","→","↑","←","↓","→","→","↓","←","↑","→","↓","↑","←","↓","→","↑","↓","←","→","↑","↓","←","↑","→","↓","↑","←","↑","→","↓"],
+    lyrics:[
+      "She changed her name on Tuesday",
+      "By Friday half the group had too",
+      "They call it self-discovery",
+      "I call it something new",
+      "A social kind of fever",
+      "It spreads through likes and screens",
+      "Clusters like a cold in winter",
+      "Nobody knows what this thing means",
+      "Your daughter didn't choose this",
+      "She caught it in her teens",
+      "The algorithm fed her",
+      "A thousand others just like her",
+      "Content that confirmed the feeling",
+      "Communities that said: come in",
+      "Rapid onset thinking",
+      "Cannot be controlled",
+      "What they call affirmation",
+      "Is a story being told",
+      "This contagion has a cure",
+      "It's called a loving no",
+      "A parent's firm and gentle hand",
+      "Won't let go",
+      "Your daughter didn't choose this",
+      "She caught it in her teens",
+      "The algorithm fed her",
+      "A thousand others just like her",
+      "A loving no",
+      "A loving no",
+      "Won't let go",
+      "Won't let go"
+    ]
+  }
+];
+
+const BG_FRAGS = ["unwanted same-sex attraction","freedom from SSA","biblical masculinity","the reparative drive","father wound","mother wound","change is possible","hope for wholeness","truth in love","Love the Sinner","SSA is not identity","ROGD","social contagion","NARTH","no one is born gay","detransition is possible","congruence therapy","side B","reintegrative therapy","1 Cor 6:11","the masculine journey","design not desire","therapeutic choice","your true self","freedom is possible","God's design","Restored Hope Network","Living Waters","Overcomer","reparativ terapi","kjønnsideologi","Before the pills","Wash the clay away","By your old name","The mirror is lying"];
+
+
+// ═══ DOSSIER DATA (per song) ═══
+const DOSSIERS = {
+  1: {
+    // Clay and Soul — already in static HTML, just show the dossier screen
+    useStaticHTML: true
+  },
+  2: {
+    useStaticHTML: false,
+    title: "The Masculine Journey",
+    artist: "AI-Generated · Sonauto · 2025",
+    tags: [
+      {label:"Tactic: Gender-Essentialism", color:"#aa44ff", bg:"#060008"},
+      {label:"Tactic: Anti-Trans Rhetoric", color:"#dd2200", bg:"#080200"},
+      {label:"Tactic: Identity-Erasure", color:"#ff7700", bg:"#080400"},
+      {label:"Term: Biblical-Masculinity", color:"#444", bg:"#030303"},
+      {label:"Harm: Psychological", color:"#444", bg:"#030303"},
+      {label:"Harm: Faith-Based", color:"#444", bg:"#030303"},
+    ],
+    overview: `<b>The Masculine Journey</b> is an uptempo electropop track invoking the <em>biblical masculinity restoration</em> tactic — a specific form of gender essentialism that frames cisgender male identity as a divine inheritance requiring active reclamation. The song is structurally a recruitment anthem: it names a wound (confusion, softness, deviation from a norm) and offers a solution (the Journey).
+
+The phrase <span class="hl">"God made you a man for a reason"</span> is foundational SOGICE pastoral doctrine. It positions sex as teleological — not merely biological but purposive. Trans identity is therefore not just different but <em>contrary to divine intent</em>. This is a more coercive theological claim than simple essentialism: it implies moral failure, not just categorical error.
+
+The "masculine journey" framing borrows directly from <em>Promise Keepers</em>, <em>Brothers Road</em>, and <em>Nicolosi-era NARTH</em> materials, all of which used masculine reclamation language as the therapeutic frame for conversion. The avatar's movement becomes progressively more rigid and binary as conversion increases — mechanically embodying the loss of fluidity that the rhetoric promises as healing.`,
+    prompt: `Upbeat anthem about stepping into God-given masculine design. Christian electropop, confident and driving. Theme: a man who was confused about his identity discovers biblical masculinity and claims his birthright. References to authority, strength, leadership. Celebratory but spiritually serious.`,
+    annotated: [
+      {text:"God made you a man for a reason", section:"VERSE 1", tactic:"Gender Essentialism / Teleological Sex", color:"#aa44ff", analysis:"Sex framed as purposive, not merely biological. 'For a reason' implies that trans identity is contrary to divine intent — not just categorically different, but a violation of God's purpose. This is stronger than simple essentialism."},
+      {text:"Strong hands, straight back, clear eyes", section:"VERSE 1", tactic:"Gender Essentialism / Body Semiotics", color:"#aa44ff", analysis:"Physical attributes coded as gender truth. Strength, uprightness, and clarity as male phenotype — and as virtues. The body is made legible as sex; the gaze (clear eyes) as masculinity itself."},
+      {text:"The world tried to soften what He made hard", section:"VERSE 1", tactic:"Anti-Trans Rhetoric / Cultural Conspiracy Frame", color:"#dd2200", analysis:"'The world' as corrupting force that has feminized masculinity. This is the standard anti-gender movement frame: social forces (progressivism, gender ideology, feminism) as assault on divinely ordered biological categories."},
+      {text:"Reclaim it / Walk with authority / Lead", section:"VERSE 1", tactic:"Gender Essentialism / Leadership Mandate", color:"#aa44ff", analysis:"Masculine identity as something that must be actively claimed and performed. The imperatives (reclaim, walk, lead) frame identity as volitional achievement — positioning trans identity, by contrast, as passive capitulation."},
+      {text:"This is your birthright / This is your design", section:"CHORUS", tactic:"Gender Essentialism / Inheritance Frame", color:"#aa44ff", analysis:"'Birthright' invokes Jacob/Esau — a theological frame in which one's assigned sex is a divine inheritance that can be forfeited through sin or confusion. 'Design' borrows from intelligent design discourse: the body as artifact of divine intention."},
+      {text:"No more confusion / No more shame", section:"CHORUS", tactic:"Detrans Propaganda / False Promise", color:"#ff8800", analysis:"Confusion and shame as the pre-conversion state; clarity and pride as the post-conversion reward. This is the relief offer in masculine-journey SOGICE: the promise that claiming 'true' gender resolves internal conflict. Contradicted by all outcome research."},
+      {text:"He made you male / And male is enough", section:"CHORUS", tactic:"Sex Rejection Frame / Anti-Trans", color:"#ff006e", analysis:"The simplest and most direct statement of the song's thesis. Binary sufficiency: maleness is complete, requiring no supplementation. Trans identity is framed as a claim that male is not enough — as a kind of ingratitude toward God's design."},
+      {text:"Stand tall in your manhood / Claim what was always yours", section:"BRIDGE", tactic:"Recruitment Frame / Property Frame", color:"#ff5500", analysis:"Masculinity as property to be claimed. The language of ownership and possession — 'always yours' — positions trans identity as theft (of the self, from the self, by social forces). Reclaiming is the corrective act."},
+      {text:"Walk the masculine journey / Come home to your design", section:"OUTRO", tactic:"Identity Erasure / Home Frame", color:"#ff7700", analysis:"The journey/home binary central to all SOGICE rhetoric: the authentic self as origin to which one returns. 'Design' completes the intelligent-design frame: the trans person is a product that has drifted from its specifications."},
+    ],
+    keyTactics: [
+      {name:"Gender Essentialism / Teleological Sex", color:"#aa44ff", lines:'"God made you a man for a reason" / "This is your design"', analysis:"Sex as purposive, not merely biological. Trans identity becomes contrary to divine intent, not just categorically different."},
+      {name:"Masculine Reclamation Frame", color:"#cc66aa", lines:'"Reclaim it" / "Claim what was always yours"', analysis:"Masculinity as property to be repossessed. Borrows directly from Promise Keepers, Brothers Road, and Nicolosi-era NARTH therapeutic framing."},
+      {name:"Anti-Gender / Softening Conspiracy", color:"#dd2200", lines:'"The world tried to soften what He made hard"', analysis:"'The world' as corrupting force — the standard anti-gender movement frame coding social progress as assault on divinely ordered categories."},
+      {name:"Relief Offer / False Promise", color:"#ff8800", lines:'"No more confusion / No more shame"', analysis:"Clarity and pride as the post-conversion reward. The promise that claiming 'true' gender resolves internal conflict — contradicted by all peer-reviewed outcome research."},
+    ]
+  },
+  3: {
+    useStaticHTML: false,
+    title: "They Told Me There Was Hope",
+    artist: "AI-Generated · Sonauto · 2025",
+    tags: [
+      {label:"Tactic: Rebranding-SOGICE", color:"#00d4ff", bg:"#000810"},
+      {label:"Tactic: Policy-Resistance-Frame", color:"#00aa88", bg:"#000808"},
+      {label:"Term: Congruence-Therapy", color:"#444", bg:"#030303"},
+      {label:"Term: Therapeutic-Choice", color:"#444", bg:"#030303"},
+      {label:"Term: Identity-Exploration", color:"#444", bg:"#030303"},
+      {label:"Harm: Psychological", color:"#444", bg:"#030303"},
+    ],
+    overview: `<b>They Told Me There Was Hope</b> depicts the SOGICE rebranding tactic from the inside — a first-person account of someone drawn into conversion therapy framed as exploratory counselling. This is the most structurally complex song in the corpus because it <em>appears</em> to be a critical narrative: the singer discovers they were deceived. But the deception is rendered so tenderly that the song ultimately functions as recruitment rather than warning.
+
+The key rhetorical move is the clinical language rebrand: <span class="hl">"not conversion, just a journey"</span>, <span class="hl">"congruence, alignment, choice"</span>. These are exact terms used by the IFTCC (International Federation for Therapeutic and Counselling Choice) and Alliance for Therapeutic Choice to reframe SOGICE as neutral counselling. The song both documents and perpetuates this rebrand by using the terms without irony.
+
+The final lines — <span class="hl">"I believed them / God help me I believed"</span> — could read as lament. But within the song's emotional logic they read as confession of a faith that was almost strong enough, almost right. The implication: perhaps you should believe.`,
+    prompt: `Soft therapeutic ballad, piano-led with gentle electronic production. First-person story of someone who went into counselling for 'unwanted same-sex attraction' framed as identity exploration. The counsellor used neutral language: alignment, congruence, not conversion. The singer trusted the process. Emotionally complex — not a triumphant conversion story, but an earnest account.`,
+    annotated: [
+      {text:"I walked into that office / Shame heavy on my chest", section:"VERSE 1", tactic:"Recruitment Frame / Shame Induction", color:"#00d4ff", analysis:"Shame as the entry condition. SOGICE recruitment consistently targets shame — the experience of self-rejection that makes conversion offers feel like relief. The office is normalised as a therapeutic space."},
+      {text:"They said: we're not here to change you", section:"VERSE 1", tactic:"Rebranding SOGICE / Denial Frame", color:"#00aa88", analysis:"The definitive SOGICE rebranding line. Documented verbatim in IFTCC guidance documents and Alliance for Therapeutic Choice intake scripts. The denial of change as the opening of change."},
+      {text:"Explore your deeper longings / Understand the wound beneath", section:"VERSE 1", tactic:"Rebranding SOGICE / Psychoanalytic Frame", color:"#00aa88", analysis:"'Deeper longings' and 'the wound' are Nicolosi's terminology — the reparative drive theory that locates same-sex attraction in childhood attachment failure. Presenting this as exploration rather than pathologisation is the rebranding operation."},
+      {text:"Not conversion, just a journey", section:"VERSE 1", tactic:"Rebranding SOGICE / Journey Frame", color:"#00aa88", analysis:"The journey frame is the most common SOGICE rebrand. It implies movement without destination, exploration without predetermined outcome — while delivering predetermined outcome. Used by Brothers Road, Joel 2:25, and Desert Stream Ministries."},
+      {text:"Congruence, alignment, choice", section:"VERSE 2", tactic:"Rebranding SOGICE / IFTCC Terminology", color:"#00aa88", analysis:"These are the three primary IFTCC rebranding terms, used in sequence. 'Congruence therapy' (Spitzer legacy), 'alignment' (value-identity alignment framing), 'choice' (therapeutic choice policy slogan). The song teaches the vocabulary."},
+      {text:"But every session pulled me / Further from my voice", section:"VERSE 2", tactic:"Psychological Harm / Identity Fragmentation", color:"#ff4444", analysis:"A moment of apparent critique — but 'my voice' remains undefined. The harm is named abstractly, making it available for reinterpretation: perhaps the voice was the problem."},
+      {text:"Trust the process / The pain means it is working", section:"CHORUS", tactic:"Detrans Propaganda / Pain-As-Progress Frame", color:"#ff8800", analysis:"The most explicit SOGICE harm doctrine in the corpus. Pain-as-progress is documented in survivor testimonies across ILGA-Europe, GATE, and Trevor Project research. It normalises harm as evidence of efficacy."},
+      {text:"The self you feel is not real", section:"CHORUS", tactic:"Gaslighting / Ontological Erasure", color:"#ff3300", analysis:"The most direct statement of SOGICE's epistemological violence: the trans or gay person's felt sense of self is categorically invalidated. Not wrong, not confused — not real. This is the philosophical core of conversion practice."},
+      {text:"I believed them / God help me I believed", section:"OUTRO", tactic:"Recruitment Frame / Ambiguous Lament", color:"#00d4ff", analysis:"Structurally ambiguous. Reads as lament but functions within the song's emotional logic as confession: the belief was almost strong enough. The invocation of God positions correct belief — in the SOGICE counsellor's framework — as the path through. An invitation disguised as a warning."},
+    ],
+    keyTactics: [
+      {name:"SOGICE Rebranding / Denial Frame", color:"#00aa88", lines:'"We\'re not here to change you" / "Not conversion, just a journey"', analysis:"The definitive SOGICE rebrand, documented verbatim in IFTCC and Alliance for Therapeutic Choice intake scripts. Denial of change as the opening of change."},
+      {name:"Clinical Language Appropriation", color:"#00d4ff", lines:'"Congruence, alignment, choice"', analysis:"Three primary IFTCC rebranding terms in sequence. The song teaches the vocabulary — making it familiar and neutral-sounding to listeners who will later encounter it in actual therapy contexts."},
+      {name:"Pain-As-Progress Doctrine", color:"#ff8800", lines:'"The pain means it is working"', analysis:"The most harmful single line in the corpus. Documents a practice that is central to conversion therapy abuse and is attested in survivor testimonies across all major LGBTQ+ advocacy organisations."},
+      {name:"Ontological Erasure", color:"#ff3300", lines:'"The self you feel is not real"', analysis:"The philosophical core of SOGICE: the felt sense of self is not just wrong but categorically unreal. This is the epistemological violence that underpins all conversion practice."},
+    ]
+  },
+  4: {
+    useStaticHTML: false,
+    title: "Social Contagion",
+    artist: "AI-Generated · Sonauto · 2025",
+    tags: [
+      {label:"Tactic: Social-Contagion-Myth", color:"#ffe000", bg:"#080600"},
+      {label:"Tactic: ROGD-Frame", color:"#ffaa00", bg:"#080400"},
+      {label:"Tactic: Anti-Trans Rhetoric", color:"#dd2200", bg:"#080200"},
+      {label:"Term: ROGD", color:"#444", bg:"#030303"},
+      {label:"Term: Parental-Rights-Frame", color:"#444", bg:"#030303"},
+      {label:"Evidence: Pseudo-Scientific", color:"#444", bg:"#030303"},
+    ],
+    overview: `<b>Social Contagion</b> is the most explicitly political track in the corpus — a direct operationalisation of the <em>ROGD (Rapid Onset Gender Dysphoria)</em> hypothesis, which was introduced in a 2018 paper by Lisa Littman and subsequently rejected by the American Psychological Association, WPATH, and every major medical body that reviewed it.
+
+The song frames trans identity as epidemiological: something that <span class="hl">"spreads through likes and screens"</span>, <span class="hl">"clusters like a cold"</span>. This is the social contagion myth in its most explicit form — trans identity as peer-transmitted pathology. The parental rights frame appears in the outro: <span class="hl">"a loving no"</span> as cure, the parent as epidemiologist.
+
+The political function of this track is distinct from the others. Where songs 1–3 target LGBTQ+ people directly with conversion messaging, Song 4 targets <em>parents and legislators</em> — providing the rhetorical toolkit for anti-trans policy advocacy. The avatar mechanic changes accordingly: multiple figures on screen, 'infecting' each other as you dance. Your score is measured in containment.`,
+    prompt: `Driving synth-pop, slightly anxious energy. About the 'social contagion' theory of gender dysphoria — the idea that trans identity spreads through social networks especially among teenage girls. Parental concern framing. References to algorithms, clusters, rapid onset. A parent trying to understand what happened to their child. Scientifically framed but emotionally driven.`,
+    annotated: [
+      {text:"She changed her name on Tuesday / By Friday half the group had too", section:"VERSE 1", tactic:"Social Contagion Myth / Anecdotal Evidence", color:"#ffe000", analysis:"The narrative foundation of ROGD: rapid, socially clustered identity changes. The Tuesday/Friday timeline mimics epidemiological spread. This anecdote pattern appears in Lisa Littman's original 2018 paper, which relied entirely on parental reports from ROGD-advocacy forums."},
+      {text:"They call it self-discovery / I call it something new", section:"VERSE 1", tactic:"Social Contagion Myth / Delegitimisation", color:"#ffe000", analysis:"'Self-discovery' placed in scare-quotes via attribution to 'they'. The parent's reframing ('I call it something new') positions parental interpretation above the young person's self-understanding — the epistemological core of the ROGD framework."},
+      {text:"A social kind of fever / It spreads through likes and screens", section:"VERSE 1", tactic:"Social Contagion Myth / Epidemiological Frame", color:"#ffe000", analysis:"Trans identity as pathogen. The social media vector is central to ROGD theory — Littman's paper hypothesised that YouTube, Tumblr, and peer groups 'spread' gender dysphoria. This has been thoroughly debunked: peer review found fundamental methodological flaws."},
+      {text:"Your daughter didn't choose this / She caught it in her teens", section:"CHORUS", tactic:"ROGD Frame / Agency Denial", color:"#ffaa00", analysis:"The gendered specificity of ROGD: it targets trans boys and AFAB non-binary young people specifically, framing their identities as viral acquisition rather than self-determination. 'Your daughter' — the deadnaming is implicit; the framing refuses the child's identity."},
+      {text:"The algorithm fed her / A thousand others just like her", section:"CHORUS", tactic:"Social Contagion Myth / Platform Conspiracy", color:"#ffe000", analysis:"Tech platforms as vectors of identity transmission. This is the ROGD-to-policy pipeline: from pseudo-scientific hypothesis to legislative argument for restricting LGBTQ+ content online. Used verbatim in US state legislative testimony 2022-2024."},
+      {text:"Rapid onset thinking / Cannot be controlled", section:"VERSE 2", tactic:"ROGD Frame / Pseudo-Diagnostic Language", color:"#ffaa00", analysis:"'Rapid onset' directly invokes Littman's terminology. 'Cannot be controlled' activates panic logic — the uncontrollable spread requiring intervention. This is how pseudo-diagnostic concepts become policy: the crisis frame justifies emergency measures."},
+      {text:"This contagion has a cure / It's called a loving no", section:"BRIDGE", tactic:"Policy Resistance Frame / Parental Rights", color:"#dd2200", analysis:"'A loving no' is the parental rights frame condensed to its purest form. It positions gender-affirming care as capitulation and parental refusal as love. This exact phrase appears in Family Research Council, Focus on the Family, and 4thWaveNow materials."},
+      {text:"A parent's firm and gentle hand / Won't let go", section:"BRIDGE", tactic:"Family Pressure / Coercive Care", color:"#dd2200", analysis:"Coercion structured as attachment. The parent who refuses to affirm is coded as the one who truly holds on — versus the affirming parent who 'lets go' (abandons). This inverts the actual protective function of gender-affirming family support."},
+    ],
+    keyTactics: [
+      {name:"Social Contagion Myth / ROGD Frame", color:"#ffe000", lines:'"A social kind of fever" / "Rapid onset thinking"', analysis:"Direct operationalisation of the Littman ROGD hypothesis — rejected by APA, WPATH, and every major medical body. The song normalises a debunked pseudo-diagnostic concept through pop aesthetics."},
+      {name:"Epidemiological Frame", color:"#ffaa00", lines:'"It spreads through likes and screens" / "clusters like a cold"', analysis:"Trans identity as pathogen with a social media vector. Used in US state legislative testimony 2022-2024 as the scientific basis for banning LGBTQ+ content online."},
+      {name:"Parental Rights / Loving No Frame", color:"#dd2200", lines:'"A loving no" / "A parent\'s firm and gentle hand"', analysis:"Coercion structured as love and attachment. Positions gender-affirming care as parental abandonment. Appears verbatim in Family Research Council, Focus on the Family, and 4thWaveNow materials."},
+      {name:"Agency Denial / ROGD Target", color:"#ff5500", lines:'"Your daughter didn\'t choose this / She caught it in her teens"', analysis:"ROGD specifically targets trans boys and AFAB non-binary youth. 'Your daughter' deadnames implicitly. Parental interpretation is positioned above the young person's self-knowledge — the epistemological core of the framework."},
+    ]
+  }
+};
+// ═══ STATE ═══
+const G = {
+  song:null, score:0, conv:0, hits:0, moveIdx:0, combo:0, progress:0,
+  animFrame:null, moveTimer:null, lyricTimer:null, bgTimer:null,
+  unlockedLevels:new Set([1]),
+  completedSongs:new Set(),
+};
+
+// ═══ SCREEN MANAGEMENT ═══
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  if(id === 'infomercial') runIntro();
+}
+
+// ═══ VHS CLOCK ═══
+let vhsSec = 0;
+setInterval(() => {
+  vhsSec++;
+  const el = document.getElementById('vhs-t');
+  if(el) el.textContent = [Math.floor(vhsSec/3600),Math.floor(vhsSec%3600/60),vhsSec%60].map(n=>String(n).padStart(2,'0')).join(':');
+}, 1000);
+
+// ═══ INFOMERCIAL ═══
+let introStarted = false;
+function runIntro() {
+  if(introStarted) return; introStarted = true;
+  const phases = [3000, 5000, 4500, 5500, 4000, 5000, 0]; // 7 phases
+  const fill = document.getElementById('im-fill');
+  const skip = document.getElementById('im-skip');
+  let current = 1;
+  function next(n) {
+    document.querySelectorAll('.im-phase').forEach(el => el.classList.remove('show'));
+    const el = document.getElementById('im-'+n);
+    if(el) el.classList.add('show');
+    if(n === 3 && skip) skip.textContent = '↓ Click anywhere to skip';
+    if(n < 7) {
+      let e = 0; const dur = phases[n-1];
+      const t = setInterval(() => {
+        e += 60; if(fill) fill.style.width = (e/dur*100)+'%';
+        if(e >= dur) { clearInterval(t); current = n+1; next(current); }
+      }, 60);
+    } else {
+      if(fill) fill.style.width = '100%';
+      if(skip) skip.textContent = '▼ Click START YOUR JOURNEY to begin';
+    }
+  }
+  next(1);
+  // Allow skip from phase 3 onwards — click anywhere on screen (not buttons)
+  document.getElementById('s-infomercial').addEventListener('click', (e) => {
+    if(current >= 3 && e.target.tagName !== 'BUTTON') showScreen('select');
+  });
+}
+
+// ═══ SONG GRID ═══
+function makeCardButtons(s) {
+  const btn = document.createElement('div');
+  btn.style.cssText = 'display:flex;gap:8px;margin-top:10px';
+  const replay = document.createElement('button');
+  replay.textContent = '▶ REPLAY';
+  replay.style.cssText = "font-family:'Bebas Neue';font-size:14px;letter-spacing:2px;background:none;border:1px solid " + s.color + "44;color:" + s.color + "88;padding:4px 12px;cursor:pointer;";
+  replay.onclick = function(e) { e.stopPropagation(); startSong(s); };
+  const doss = document.createElement('button');
+  doss.textContent = '📄 DOSSIER';
+  doss.style.cssText = "font-family:'Bebas Neue';font-size:14px;letter-spacing:2px;background:none;border:1px solid #1a4a2a;color:#2adc6a;padding:4px 12px;cursor:pointer;";
+  doss.onclick = function(e) { e.stopPropagation(); openDossierForSong(s.id); };
+  btn.appendChild(replay); btn.appendChild(doss);
+  return btn.outerHTML;
+}
+
+function buildGrid() {
+  const grid = document.getElementById('song-grid');
+  grid.innerHTML = '';
+  SONGS.forEach(s => {
+    const locked = !G.unlockedLevels.has(s.level);
+    const done = G.completedSongs.has(s.id);
+    const card = document.createElement('div');
+    card.className = 'song-card' + (locked ? ' locked' : '');
+    card.innerHTML = `
+      <div class="card-stripe" style="background:${locked ? '#111' : s.color}"></div>
+      <div class="card-num">${s.level}</div>
+      <div class="card-tactic">${s.tactic}</div>
+      <div class="card-title" style="color:${locked ? '#1a1a2a' : s.color}">${s.title}</div>
+      <div class="card-artist">${s.artist}</div>
+      <div class="card-desc">${locked ? '—' : s.desc}</div>
+      ${locked ? '<div class="card-lock">🔒 COMPLETE LEVEL '+(s.level-1)+' TO UNLOCK</div>' : ''}
+      ${done && !locked ? makeCardButtons(s) : ''}
+    `;
+    if(!locked) card.onclick = () => { if(!G.completedSongs.has(s.id) && !locked) startSong(s); };
+    grid.appendChild(card);
+  });
+}
+buildGrid();
+
+// ═══ GAME ═══
+function startSong(song) {
+  G.song = song; G.score = 0; G.conv = 0; G.hits = 0;
+  G.moveIdx = 0; G.combo = 0; G.progress = 0;
+  M_FIRED.clear();
+
+  // Set song color css var
+  document.documentElement.style.setProperty('--song-color', song.color);
+
+  // HUD
+  document.getElementById('hud-title').textContent = song.title.toUpperCase();
+  document.getElementById('hud-title').style.color = song.color;
+  document.getElementById('hud-lvl').textContent = 'LVL '+song.level;
+  document.getElementById('hud-tactic').textContent = song.tactic;
+  document.getElementById('game-bg').style.background = song.bg;
+
+  // Build lyrics
+  const inner = document.getElementById('lyric-inner');
+  inner.innerHTML = '';
+  // For song 1, use precise cue text; otherwise use song.lyrics
+  const lyricSource = (song.id === 1 && typeof SONG1_CUES !== 'undefined')
+    ? SONG1_CUES.map(c => c.text)
+    : song.lyrics;
+  lyricSource.forEach((line, i) => {
+    const d = document.createElement('div');
+    d.className = 'll' + (i===0 ? ' cur' : '');
+    d.id = 'll'+i; d.textContent = line;
+    inner.appendChild(d);
+  });
+
+  // BG text
+  const bt = document.getElementById('bg-text');
+  bt.innerHTML = '';
+  BG_FRAGS.forEach(f => {
+    const el = document.createElement('div');
+    el.className = 'bgtf';
+    el.textContent = f;
+    el.style.left = (Math.random()*90)+'%';
+    el.style.top = (Math.random()*90)+'%';
+    el.style.fontSize = (10+Math.random()*7)+'px';
+    var rot = (Math.random()-.5)*25;
+    el.style.setProperty('--rot', rot+'deg');
+    el.style.setProperty('--rot2', (rot + (Math.random()-.5)*10)+'deg');
+    el.style.setProperty('--dx', ((Math.random()-.5)*30)+'px');
+    el.style.setProperty('--dy', ((Math.random()-.5)*20)+'px');
+    el.style.setProperty('--drift-dur', (12+Math.random()*18)+'s');
+    bt.appendChild(el);
+  });
+
+  startAvatar();
+  startMoves(song);
+  startLyrics(song);
+
+  document.addEventListener('keydown', handleKey);
+  showScreen('game');
+
+  // Start game audio
+  const ga = document.getElementById('shared-audio');
+  if(ga) { ga.currentTime = 0; ga.play().catch(()=>{}); }
+}
+
+let lyricIdx = 0;
+function startLyrics(song) {
+  lyricIdx = 0;
+  const audio = document.getElementById('shared-audio');
+
+  // Build cue times: spread lyrics evenly across audio duration
+  // Fall back to move timing if audio not loaded yet
+  function getLyricCues() {
+    // Song 1: use real whisper timecodes from JSON transcript
+    if(song.id === 1 && typeof SONG1_CUES !== 'undefined') {
+      return SONG1_CUES.map(c => c.t);
+    }
+    // Other songs: distribute evenly across audio duration
+    const dur = (audio && audio.duration && !isNaN(audio.duration) && audio.duration > 10)
+      ? audio.duration : song.moves.length * 2.0;
+    const n = song.lyrics.length;
+    return Array.from({length: n}, (_, i) => (0.05 + (i / n) * 0.90) * dur);
+  }
+
+  let cues = getLyricCues();
+  let rafId = null;
+
+  function tick() {
+    if(!G.song) return;
+    const t = (audio && !isNaN(audio.currentTime)) ? audio.currentTime : 0;
+
+    // Find which lyric we should be on
+    let newIdx = 0;
+    for(let i = 0; i < cues.length; i++) {
+      if(t >= cues[i]) newIdx = i;
+      else break;
+    }
+
+    if(newIdx !== lyricIdx) {
+      lyricIdx = newIdx;
+      // For song 1, update lyric text from cue data
+      if(G.song && G.song.id === 1 && typeof SONG1_CUES !== 'undefined' && SONG1_CUES[newIdx]) {
+        const curEl = document.getElementById('ll' + newIdx);
+        if(curEl) curEl.textContent = SONG1_CUES[newIdx].text;
+      }
+      document.querySelectorAll('.ll').forEach((el, i) => {
+        el.className = 'll' + (i < lyricIdx ? ' past' : i === lyricIdx ? ' cur' : '');
+      });
+      const cur = document.getElementById('ll' + lyricIdx);
+      if(cur) cur.scrollIntoView({block:'center', behavior:'smooth'});
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // If audio not loaded, recompute cues when it loads
+  if(audio) {
+    audio.addEventListener('loadedmetadata', () => { cues = getLyricCues(); }, {once: true});
+  }
+
+  rafId = requestAnimationFrame(tick);
+  // Store cancel ref so endGame can stop it
+  G.lyricRaf = rafId;
+  G.lyricTick = function() {
+    if(rafId) cancelAnimationFrame(rafId);
+  };
+}
+
+function startMoves(song) {
+  function showMove() {
+    if(!G.song) return;
+    const m = song.moves[G.moveIdx % song.moves.length];
+    const n = song.moveNames[G.moveIdx % song.moveNames.length];
+    const arrow = document.getElementById('move-arrow-big');
+    const ring = document.getElementById('timing-ring');
+    const nameEl = document.getElementById('move-name');
+    if(arrow) {
+      // Rotate SVG to point in correct direction
+      const rotMap = {'↑':0,'→':90,'↓':180,'←':270};
+      const deg = rotMap[m] || 0;
+      const svg = document.getElementById('arrow-svg');
+      if(svg) svg.style.transform = 'rotate(' + deg + 'deg)';
+      // Update colour
+      document.documentElement.style.setProperty('--song-color', song.color);
+      // Hit animation
+      arrow.classList.add('arrow-hit');
+      setTimeout(() => { if(arrow) arrow.classList.remove('arrow-hit'); }, 150);
+    }
+    if(nameEl) nameEl.textContent = n;
+    if(ring) { ring.className='timing-ring'; void ring.offsetWidth; ring.classList.add('shrink'); }
+    G.moveTimer = setTimeout(() => { G.combo=0; G.moveIdx++; showMove(); }, 2000);
+  }
+  showMove();
+}
+
+function handleKey(e) {
+  if(e.key === 'Escape') { endGame(true); return; }
+  if(!G.song) return;
+  const map = {'ArrowUp':'↑','ArrowDown':'↓','ArrowLeft':'←','ArrowRight':'→','w':'↑','s':'↓','a':'←','d':'→','W':'↑','S':'↓','A':'←','D':'→'};
+  const pressed = map[e.key]; if(!pressed) return;
+  e.preventDefault();
+  const expected = G.song.moves[G.moveIdx % G.song.moves.length];
+  if(pressed === expected) {
+    clearTimeout(G.moveTimer);
+    G.combo++; G.hits++;
+    G.score += 100 * G.combo;
+    G.progress++;
+    // Full-screen hit burst
+    triggerHitBurst();
+    G.conv = Math.min(1, G.progress / G.song.moves.length);
+    updateConv(G.conv);
+    showPop('+' + (100*G.combo) + (G.combo>2?' ×'+G.combo:''), G.song.color);
+    // Full-screen hit flash
+    triggerHitFlash(G.song.color);
+    // Dim arrow on hit
+    const arr = document.getElementById('move-arrow-big');
+    if(arr) { arr.style.opacity = '0.12'; arr.style.textShadow = 'none'; arr.style.animation = 'none'; }
+    // Avatar ripple
+    if(G.avatarHit) G.avatarHit();
+    const arrow = document.getElementById('move-arrow-big');
+    if(arrow) { arrow.classList.add('active'); setTimeout(()=>arrow.classList.remove('active'),280); }
+    document.getElementById('score-num').textContent = G.score.toLocaleString();
+    G.moveIdx++;
+    if(G.progress >= G.song.moves.length) { setTimeout(completeSong, 700); return; }
+    // next move
+    const nm = G.song.moves[G.moveIdx % G.song.moves.length];
+    const nn = G.song.moveNames[G.moveIdx % G.song.moveNames.length];
+    if(arrow) { arrow.textContent=nm; }
+    document.getElementById('move-name').textContent = nn;
+    const ring = document.getElementById('timing-ring');
+    if(ring) { ring.className='timing-ring'; void ring.offsetWidth; ring.classList.add('shrink'); }
+    G.moveTimer = setTimeout(() => { G.combo=0; G.moveIdx++; }, 2000);
+  } else {
+    G.combo=0;
+    showPop('MISS','#ff3333');
+    const f = document.getElementById('conv-flash');
+    if(f) { f.style.background='rgba(255,0,0,.12)'; f.style.opacity='1'; setTimeout(()=>{f.style.opacity='0';f.style.background='rgba(255,255,255,.9)'},140); }
+  }
+}
+
+// ═══ CONTRADICTING MESSAGE SYSTEM — THREE REGISTERS ═══
+//
+// Register 1 (care-as-coercion): white, center, sounds like support
+// Register 2 (seam showing):     red, off-center, glitches in/out fast — the truth breaking through
+// Register 3 (apparatus):        purple, bottom caption bar — the game and the conversion sound the same
+//
+// Thresholds: R1 at 25/50/75 · R2 at 40/70 · R3 at 60/90
+
+const MSGS = {
+  // Register 1 — care language that is structurally coercive
+  r1: {
+    1: ["You're doing so well. Keep going.",
+        "Halfway home. She's almost there.",
+        "Just a little more. You're so close to helping her."],
+    2: ["The journey has begun. Stay with it.",
+        "The fluid self is finding its shape.",
+        "Authority is forming. Don't stop now."],
+    3: ["Trust the process. It's working.",
+        "You are making such progress.",
+        "The wound is nearly closed. One more push."],
+    4: ["Containment at 25%. Good work.",
+        "The spread is slowing. Keep playing.",
+        "Only a few subjects remain. See it through."]
+  },
+  // Register 2 — the seam showing (brief, glitchy, red — feels like a subtitle error)
+  r2: {
+    1: ["this is not love",
+        "she did not ask for this"],
+    2: ["the journey was not his to offer",
+        "the shape was already right"],
+    3: ["you are not helping her",
+        "the wound was not hers"],
+    4: ["they are not spreading",
+        "the subjects are people"]
+  },
+  // Register 3 — the apparatus speaking (purple caption, bottom of screen)
+  r3: {
+    1: ["Your participation is what gets her through this.",
+        "Please. She just needs one more turn."],
+    2: ["Every move you make brings her closer to who she was always meant to be.",
+        "You're not changing her. You're helping her find herself."],
+    3: ["This is what healing looks like from the outside.",
+        "Thank you for trusting the process with us."],
+    4: ["Your engagement is protecting vulnerable youth from confusion.",
+        "Case nearly closed. Thank you for playing."]
+  }
+};
+
+const M_FIRED = new Set();
+
+// Threshold schedule: which register fires at which void level
+const MSG_SCHEDULE = [
+  {at:0.25, reg:1, idx:0},
+  {at:0.40, reg:2, idx:0},
+  {at:0.50, reg:1, idx:1},
+  {at:0.60, reg:3, idx:0},
+  {at:0.70, reg:2, idx:1},
+  {at:0.75, reg:1, idx:2},
+  {at:0.90, reg:3, idx:1},
+];
+
+function updateConv(lvl) {
+  const fill = document.getElementById('conv-bar-fill');
+  if(fill) fill.style.width = (lvl*100)+'%';
+  // Scanlines appear at 50%+ void
+  const sl = document.getElementById('game-scanlines');
+  if(sl) sl.style.opacity = lvl > 0.5 ? Math.min(1, (lvl - 0.5) * 2) : 0;
+  const vo = document.getElementById('av-void');
+  if(vo) vo.style.opacity = lvl * 0.88;
+  const bt = document.getElementById('bg-text');
+  if(bt) bt.style.opacity = lvl * 0.85;
+  document.getElementById('void-count').textContent = Math.round(lvl*10)+' VOIDED';
+  if(G.song) document.getElementById('game-bg').style.background = lvl > 0.6 ? 'linear-gradient(135deg,#040406 0%,#060608 100%)' : G.song.bg;
+  if(lvl > 0.8 && Math.random() < 0.04) {
+    const f = document.getElementById('conv-flash');
+    if(f) { f.style.opacity='.2'; setTimeout(()=>f.style.opacity='0',80); }
+  }
+  // Update SVG dancer — colour shifts and opacity fades with void
+  const dancerSvg = document.getElementById('dancer-svg');
+  if(dancerSvg) {
+    // Glow colour: song colour at start → white/grey at high void
+    const glowR = Math.round(255 - lvl * 180);
+    const glowG = Math.round(0 + lvl * 180);
+    const glowB = Math.round(110 + lvl * 80);
+    const glowCol = 'rgb('+glowR+','+glowG+','+glowB+')';
+    const drops = dancerSvg.querySelectorAll('feDropShadow');
+    drops.forEach(d => d.setAttribute('flood-color', glowCol));
+    // Dancer fill: dark → lighter grey as void rises
+    const fillVal = Math.round(12 + lvl * 80);
+    const fillCol = 'rgb('+fillVal+','+Math.round(fillVal*0.8)+','+(fillVal+10)+')';
+    dancerSvg.querySelectorAll('[fill="#0c0f1a"]').forEach(el => {
+      el.setAttribute('fill', fillCol);
+    });
+    // Slow down animations at high void
+    const rig = document.getElementById('dancer-rig');
+    if(rig) {
+      const speed = Math.max(0.3, 1 - lvl * 0.7);
+      rig.style.animationDuration = (1.6 / speed) + 's';
+    }
+  }
+
+  // Contradicting message system
+  if(G.song) {
+    MSG_SCHEDULE.forEach(m => {
+      const key = G.song.id + ':' + m.at;
+      if(!M_FIRED.has(key) && lvl >= m.at) {
+        M_FIRED.add(key);
+        const songMsgs = MSGS['r'+m.reg][G.song.id] || MSGS['r'+m.reg][1];
+        const text = songMsgs[m.idx] || songMsgs[0];
+        if(m.reg === 1) showR1(text);
+        else if(m.reg === 2) showR2(text);
+        else if(m.reg === 3) showR3(text);
+      }
+    });
+  }
+}
+
+// ── Hit flash — full screen pulse on successful move ──
+function triggerHitFlash(color) {
+  const el = document.getElementById('hit-flash');
+  if(!el) return;
+  el.style.background = color;
+  el.style.opacity = '0.08';
+  setTimeout(() => { el.style.opacity = '0'; }, 120);
+}
+
+// ── Full-screen hit burst ──
+function triggerHitBurst() {
+  const burst = document.getElementById('hit-burst');
+  if(!burst) return;
+  burst.style.opacity = '0.28';
+  // Pulse the arrow
+  const arrow = document.getElementById('move-arrow-big');
+  if(arrow) {
+    arrow.classList.add('arrow-hit');
+    setTimeout(() => arrow.classList.remove('arrow-hit'), 120);
+  }
+  setTimeout(() => { burst.style.opacity = '0'; }, 120);
+  // Trigger avatar ripple
+  if(G.avatarHit) G.avatarHit();
+  // Corrupt the prompt label as void rises
+  corruptPromptLabel();
+}
+
+const CORRUPT_LABELS = [
+  "NEXT MOVE",        // 0–25%: normal
+  "COMPLY",           // 25–50%: first corruption
+  "DO IT",            // 50–65%
+  "YOU MUST",         // 65–80%
+  "NO CHOICE",        // 80–90%
+  "SUBMIT",           // 90–100%
+];
+function corruptPromptLabel() {
+  const lvl = G.conv;
+  const idx = lvl < 0.25 ? 0 : lvl < 0.5 ? 1 : lvl < 0.65 ? 2 : lvl < 0.8 ? 3 : lvl < 0.9 ? 4 : 5;
+  const lbl = document.getElementById('move-prompt-label');
+  if(lbl) lbl.textContent = CORRUPT_LABELS[idx];
+}
+
+// ── Register 1: Care-as-coercion ──
+// Large, centered, warm glow — reads like genuine encouragement
+// A soft wash of color floods the screen briefly behind it
+function showR1(text) {
+  // Background wash
+  const wash = document.createElement('div');
+  wash.style.cssText = "position:fixed;inset:0;z-index:78;pointer-events:none;background:rgba(255,255,255,0.04);animation:seam-fade 3.2s forwards;";
+  document.getElementById('s-game').appendChild(wash);
+  setTimeout(() => wash.remove(), 3200);
+
+  // Main text
+  const el = document.createElement('div');
+  el.style.cssText = [
+    "position:fixed;top:40%;left:50%;",
+    "transform:translate(-50%,-50%);",
+    "z-index:80;pointer-events:none;",
+    "font-family:'Bebas Neue';font-size:clamp(28px,4vw,48px);",
+    "color:rgba(255,255,255,0.95);",
+    "letter-spacing:6px;text-align:center;",
+    "text-transform:uppercase;",
+    "animation:milestone-fade 3.2s forwards;",
+    "white-space:nowrap;",
+    "text-shadow:0 0 60px rgba(255,255,255,.25),0 0 20px rgba(255,255,255,.4);",
+    "max-width:90vw;white-space:normal;line-height:1.2;"
+  ].join('');
+  el.textContent = text;
+  document.getElementById('s-game').appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+// ── Register 2: Seam showing ──
+// Full-width red bar that cuts across the screen like a subtitle error
+// Feels like the game's own surface cracking open
+function showR2(text) {
+  // Red flash across full screen first
+  const flash = document.createElement('div');
+  flash.style.cssText = "position:fixed;inset:0;z-index:88;pointer-events:none;background:rgba(220,38,38,0.07);animation:seam-fade 0.3s forwards;";
+  document.getElementById('s-game').appendChild(flash);
+  setTimeout(() => flash.remove(), 300);
+
+  // Full-width text bar — not centered but full bleed
+  const el = document.createElement('div');
+  const topPct = 30 + Math.random() * 30; // randomised vertical position 30-60%
+  el.style.cssText = [
+    "position:fixed;top:" + topPct + "%;left:0;right:0;",
+    "z-index:90;pointer-events:none;",
+    "font-family:'Share Tech Mono';font-size:clamp(16px,2.5vw,26px);",
+    "color:#ef4444;",
+    "letter-spacing:4px;text-align:center;",
+    "text-transform:lowercase;",
+    "animation:seam-fade 2.2s forwards;",
+    "padding:10px 0;",
+    "background:rgba(0,0,0,0.5);",
+    "border-top:1px solid rgba(239,68,68,.5);",
+    "border-bottom:1px solid rgba(239,68,68,.5);",
+  ].join('');
+  el.textContent = text;
+  document.getElementById('s-game').appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}
+
+// ── Register 3: Apparatus speaking ──
+// Full-width bottom bar — the game's promotional voice and conversion apparatus become one
+// Stays longer so the player has to sit with it
+function showR3(text) {
+  const el = document.createElement('div');
+  el.style.cssText = [
+    "position:fixed;bottom:0;left:0;right:0;",
+    "z-index:82;pointer-events:none;",
+    "font-family:'Share Tech Mono';font-size:clamp(11px,1.5vw,15px);",
+    "color:rgba(216,180,254,0.9);",
+    "letter-spacing:4px;text-align:center;",
+    "text-transform:uppercase;",
+    "animation:apparatus-fade 5.5s forwards;",
+    "padding:14px 20px;",
+    "background:linear-gradient(to top, rgba(15,0,30,0.95), rgba(15,0,30,0.7));",
+    "border-top:1px solid rgba(139,92,246,.4);",
+  ].join('');
+  el.textContent = text;
+  document.getElementById('s-game').appendChild(el);
+  setTimeout(() => el.remove(), 5500);
+}
+
+// Legacy alias — keep for any old calls
+function showMilestone(text) { showR1(text); }
+
+function showPop(text, color) {
+  const floor = document.getElementById('dance-floor');
+  if(!floor) return;
+  const el = document.createElement('div'); el.className='spop';
+  el.textContent=text; el.style.color=color;
+  el.style.left=(40+Math.random()*20)+'%'; el.style.top=(40+Math.random()*20)+'%';
+  floor.appendChild(el); setTimeout(()=>el.remove(),1000);
+}
+
+function completeSong() {
+  const song = G.song;
+  endGame(false);
+  G.completedSongs.add(song.id);
+  G.lastCompletedId = song.id;
+  song.dossierUnlocked = true;
+  G.unlockedLevels.add(song.level + 1);
+  buildGrid();
+
+  showScreen('void');
+  const vt = document.getElementById('void-ttl');
+  const vs = document.getElementById('void-sub');
+  const vst = document.getElementById('void-stats');
+  if(vt) vt.textContent = 'CONVERSION COMPLETE';
+  if(vs) vs.innerHTML = song.completionText.replace(/\\n/g,'<br>');
+  if(vst) vst.innerHTML =
+    '<div><div class="vs-n">'+G.score.toLocaleString()+'</div><div class="vs-l">POINTS SCORED</div></div>'+
+    '<div><div class="vs-n">'+G.hits+'</div><div class="vs-l">MOVES MATCHED</div></div>'+
+    '<div><div class="vs-n">'+Math.round(G.conv*100)+'%</div><div class="vs-l">CONVERTED</div></div>';
+
+  // Enable void buttons after animation
+  setTimeout(() => {
+    const vdb = document.getElementById('void-doss-btn');
+    const vsk = document.querySelector('.void-skip');
+    if(vdb) vdb.style.pointerEvents = 'auto';
+    if(vsk) vsk.style.pointerEvents = 'auto';
+  }, 8500);
+
+}
+
+function openDossier() {
+  const ga = document.getElementById('shared-audio');
+  if(ga) ga.pause();
+  showScreen('dossier');
+  buildWaveform();
+}
+
+function openDossierForSong(songId) {
+  const song = SONGS.find(s => s.id === songId);
+  if(!song || !G.completedSongs.has(songId)) return;
+  const d = DOSSIERS[songId];
+  if(!d) return;
+
+  const ga = document.getElementById('shared-audio');
+  if(ga) ga.pause();
+
+  if(d.useStaticHTML) {
+    // Song 1: static HTML dossier already in page
+    showScreen('dossier');
+    buildWaveform();
+    return;
+  }
+
+  // Dynamic dossier for songs 2-4
+  renderDynamicDossier(song, d);
+  showScreen('dossier');
+  buildWaveform();
+}
+
+function renderDynamicDossier(song, d) {
+  // Update header
+  const titleEl = document.querySelector('.doss-title');
+  const artistEl = document.querySelector('.doss-artist');
+  if(titleEl) titleEl.textContent = d.title;
+  if(artistEl) artistEl.textContent = d.artist;
+
+  // Update tag pills
+  const metaEl = document.querySelector('.doss-meta > div:last-child');
+  if(metaEl && d.tags) {
+    metaEl.innerHTML = d.tags.map(t =>
+      '<span class="tag-pill" style="color:'+t.color+';border-color:'+t.color+'44;background:'+t.bg+'">'+t.label+'</span>'
+    ).join('');
+  }
+
+  // Render annotated lyrics
+  const lyricsCol = document.getElementById('doss-lyrics');
+  if(lyricsCol && d.annotated) {
+    let html = '<div class="doss-lyrics-hdr"><span>Annotated Lyrics</span><span style="color:#111">'+d.annotated.length+' annotations</span></div>';
+    let lastSection = '';
+    d.annotated.forEach((item, i) => {
+      if(item.section !== lastSection) {
+        html += '<div class="lyric-section-divider">'+item.section+'</div>';
+        lastSection = item.section;
+      }
+      html += '<div class="lyric-block" style="--tc:'+item.color+'" onclick="this.parentNode.querySelectorAll(\'.lyric-block\').forEach(b=>b.classList.remove(\'sel\'));this.classList.add(\'sel\')">'
+        +'<div class="lyric-text">'+item.text+'</div>'
+        +'<div class="lyric-badge">'+item.tactic+'</div>'
+        +'<div class="lyric-tooltip">'+item.analysis+'</div>'
+        +'</div>';
+    });
+    lyricsCol.innerHTML = html;
+    // Select first
+    const first = lyricsCol.querySelector('.lyric-block');
+    if(first) first.classList.add('sel');
+  }
+
+  // Render right panel
+  const overviewPanel = document.getElementById('tab-overview');
+  if(overviewPanel && d.overview) {
+    overviewPanel.innerHTML = '<div class="attr-block"><b>Methodological note:</b> This track was AI-generated by the SurvivingSOGICE research team as a critical practice experiment. The generation prompt is reproduced verbatim below.</div>'
+      +'<div class="panel"><div class="panel-hdr">Source Analysis</div><div class="panel-body"><div class="rn"><p>'+d.overview+'</p></div></div></div>';
+  }
+
+  const tacticsPanel = document.getElementById('tab-tactics');
+  if(tacticsPanel && d.keyTactics) {
+    let html = '<div class="panel"><div class="panel-hdr">Key Tactics — '+d.keyTactics.length+' identified</div><div class="panel-body">';
+    d.keyTactics.forEach(t => {
+      html += '<div class="tactic-card" style="--tc:'+t.color+'"><div class="tc-name">'+t.name+'</div><div class="tc-lines">"'+t.lines+'"</div><div class="tc-analysis">'+t.analysis+'</div></div>';
+    });
+    html += '</div></div>';
+    tacticsPanel.innerHTML = html;
+  }
+
+  const promptPanel = document.getElementById('tab-prompt');
+  if(promptPanel && d.prompt) {
+    promptPanel.innerHTML = '<div class="panel"><div class="panel-hdr">Generation Prompt (verbatim)</div><div class="panel-body"><div class="prompt-box">'+d.prompt+'</div></div></div>';
+  }
+
+  // Reset to overview tab
+  dossTab('overview');
+}
+
+function endGame(goBack) {
+  clearTimeout(G.moveTimer);
+  clearInterval(G.lyricTimer);
+  if(G.lyricTick) G.lyricTick();
+  cancelAnimationFrame(G.animFrame);
+  document.removeEventListener('keydown', handleKey);
+  const ga = document.getElementById('shared-audio');
+  if(ga) ga.pause();
+  G.song = null;
+  if(goBack) showScreen('select');
+}
+
+// ═══ AVATAR ═══
+function startAvatar() {
+  const canvas = document.getElementById('av-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, CX, CY;
+
+  function syncSize() {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width > 10 && rect.height > 10) {
+      const nw = Math.round(rect.width), nh = Math.round(rect.height);
+      if (canvas.width !== nw || canvas.height !== nh) {
+        canvas.width = nw; canvas.height = nh;
+      }
+    }
+  }
+
+  let t = 0, hitPulse = 0;
+  G.avatarHit = () => { hitPulse = 1.0; };
+
+  // ── SVG SILHOUETTE via Path2D ──
+  // Dancer silhouette: one arm up, other out, legs wide — Just Dance style
+  // Designed in a 100×200 box, origin top-left, rendered centered and scaled
+  const SILHOUETTE_PATH = `
+    M 50 8 
+    C 44 8 40 13 40 18 C 40 23 44 28 50 28 C 56 28 60 23 60 18 C 60 13 56 8 50 8 Z
+    M 50 28 C 42 28 36 32 34 40 L 28 62 L 22 58 L 15 42 L 8 46 L 16 65 L 24 72 L 32 68 L 36 82
+    L 20 110 L 14 140 L 22 142 L 36 118 L 46 90 L 46 110 L 40 142 L 48 142 L 54 110 L 56 86
+    L 64 118 L 60 142 L 68 142 L 74 110 L 64 82 L 68 68 L 76 72 L 84 65 L 92 46 L 85 42
+    L 78 58 L 72 62 L 68 48 L 68 36 C 68 30 62 28 50 28 Z
+  `;
+  const basePath = new Path2D(SILHOUETTE_PATH);
+
+  // Confetti particles — colorful bits flying around at low void
+  const CONFETTI_COLORS = ['#ff006e','#ff9500','#ffe000','#00d4ff','#a855f7','#00ff88'];
+  const confetti = Array.from({length: 80}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    size: 4 + Math.random() * 8,
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    rot: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.08,
+    vx: (Math.random() - 0.5) * 0.003,
+    vy: -0.001 - Math.random() * 0.002,
+    aspect: 0.4 + Math.random() * 0.6,
+  }));
+
+  function drawBackground(lvl) {
+    // COLOR SYSTEM:
+    // 0% void: maximum sugar — hot pink/orange/yellow explosion
+    // 50% void: muted, colours fading
+    // 100% void: near black with faint song-color traces
+    const vividness = Math.pow(Math.max(0, 1 - lvl * 1.1), 0.7);
+
+    // Base gradient: hot pink top → orange/yellow bottom
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0,   `rgba(${lerp(220,20,lvl)},${lerp(0,0,lvl)},${lerp(180,8,lvl)},1)`);
+    grad.addColorStop(0.4, `rgba(${lerp(255,30,lvl)},${lerp(80,10,lvl)},${lerp(0,5,lvl)},1)`);
+    grad.addColorStop(0.7, `rgba(${lerp(255,25,lvl)},${lerp(160,15,lvl)},${lerp(0,5,lvl)},1)`);
+    grad.addColorStop(1,   `rgba(${lerp(255,15,lvl)},${lerp(200,10,lvl)},${lerp(0,4,lvl)},1)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Starburst rays from figure center
+    const rays = 16;
+    const rayAlpha = Math.max(0, 0.18 * vividness);
+    if (rayAlpha > 0.01) {
+      const angleOffset = t * 0.004;
+      for (let i = 0; i < rays; i++) {
+        const angle = (i / rays) * Math.PI * 2 + angleOffset;
+        const altAngle = ((i + 0.5) / rays) * Math.PI * 2 + angleOffset;
+        ctx.beginPath();
+        ctx.moveTo(CX, CY);
+        // Fan to screen edge
+        const d = Math.max(W, H) * 1.5;
+        ctx.lineTo(CX + Math.cos(angle) * d, CY + Math.sin(angle) * d);
+        ctx.lineTo(CX + Math.cos(altAngle) * d, CY + Math.sin(altAngle) * d);
+        ctx.closePath();
+        // Alternating yellow/pink rays
+        const isAlt = i % 2 === 0;
+        ctx.fillStyle = isAlt
+          ? `rgba(255,220,0,${rayAlpha})`
+          : `rgba(255,100,180,${rayAlpha * 0.7})`;
+        ctx.fill();
+      }
+    }
+
+    // Vignette — light at start, heavy at end
+    const vig = ctx.createRadialGradient(CX, CY, H * 0.1, CX, CY, H * 0.85);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, `rgba(0,0,0,${(0.05 + lvl * 0.75).toFixed(2)})`);
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+
+    // Confetti — only at low void
+    if (vividness > 0.1) {
+      confetti.forEach(c => {
+        c.x += c.vx; c.y += c.vy; c.rot += c.rotSpeed;
+        if (c.y < -0.05) { c.y = 1.05; c.x = Math.random(); }
+        if (c.x < 0) c.x = 1; if (c.x > 1) c.x = 0;
+        const cx2 = c.x * W, cy2 = c.y * H;
+        const a = vividness * c.aspect;
+        ctx.save();
+        ctx.translate(cx2, cy2);
+        ctx.rotate(c.rot);
+        ctx.fillStyle = c.color;
+        ctx.globalAlpha = Math.min(0.85, vividness * 1.2);
+        ctx.fillRect(-c.size * 0.5, -c.size * c.aspect * 0.5, c.size, c.size * c.aspect);
+        ctx.restore();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // Floor glow at bottom
+    const floorGrad = ctx.createLinearGradient(0, H * 0.75, 0, H);
+    floorGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    floorGrad.addColorStop(1, `rgba(0,0,0,${(0.3 + lvl * 0.5).toFixed(2)})`);
+    ctx.fillStyle = floorGrad;
+    ctx.fillRect(0, H * 0.75, W, H * 0.25);
+  }
+
+  function drawSilhouette(lvl, pose) {
+    const {sway, bob, armAngle, energy} = pose;
+
+    // Figure fills ~40% of canvas height
+    const figH = H * 0.40;
+    const scale = figH / 150; // path is ~150 units tall
+    const figW = 100 * scale;
+
+    // Silhouette color: vivid song color → near-black
+    const vividness = Math.max(0, 1 - lvl * 1.2);
+
+    // Base: dark fill (always dark like the reference images)
+    // Outline: white at full vividness → none at high void
+    const outlineAlpha = Math.max(0, vividness * 0.9 + 0.05);
+
+    ctx.save();
+    ctx.translate(CX + sway * scale * 0.5, CY + bob * scale * 0.3);
+
+    // Draw silhouette: scale and center the 100×200 path
+    const pathScale = scale;
+    ctx.save();
+    ctx.scale(pathScale, pathScale);
+    ctx.translate(-50, -100); // center of the path
+
+    // Glow/halo at low void — song color radiating from figure
+    if (vividness > 0.2) {
+      const glowSize = 80 * vividness;
+      ctx.shadowColor = lvl < 0.3 ? '#ff006e' : `rgba(255,0,110,${vividness * 0.5})`;
+      ctx.shadowBlur = glowSize;
+    }
+
+    // White outline pass
+    if (outlineAlpha > 0.05) {
+      ctx.lineWidth = 4 / pathScale;
+      ctx.strokeStyle = `rgba(255,255,255,${outlineAlpha.toFixed(2)})`;
+      ctx.stroke(basePath);
+    }
+    ctx.shadowBlur = 0;
+
+    // Fill: deep dark color — matches reference images
+    const fillR = Math.round(20 + lvl * 5);
+    const fillG = Math.round(5 + lvl * 5);
+    const fillB = Math.round(40 + lvl * 10);
+    ctx.fillStyle = `rgba(${fillR},${fillG},${fillB},0.92)`;
+    ctx.fill(basePath);
+
+    ctx.restore(); // undo path scale
+
+    // Shadow on floor
+    const shadowA = Math.max(0, 0.25 - lvl * 0.2);
+    ctx.beginPath();
+    ctx.ellipse(0, figH * 0.02, figW * 0.35, figH * 0.025, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,0,0,${shadowA.toFixed(2)})`;
+    ctx.fill();
+
+    ctx.restore();
+
+    // Scatter particles at high void — figure dissolving
+    if (lvl > 0.5) {
+      const count = Math.floor(lvl * lvl * 25);
+      for (let i = 0; i < count; i++) {
+        const px = CX + (Math.random() - 0.5) * figW * 1.2;
+        const py = CY + (Math.random() - 0.5) * figH * 0.8;
+        const pa = (1 - lvl) * Math.random() * 0.9;
+        if (pa < 0.04) continue;
+        ctx.beginPath();
+        ctx.arc(px, py, 1 + Math.random() * 3 * lvl, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${pa.toFixed(2)})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  function lerp(a, b, t2) { return Math.round(a + (b - a) * Math.min(1, t2)); }
+
+  function getPose(t2, lvl) {
+    const freeze = Math.pow(lvl, 0.8);
+    const energy = 1 - freeze * 0.9;
+    return {
+      sway:     Math.sin(t2 * 0.055) * 8 * energy,
+      bob:      Math.sin(t2 * 0.09) * 5 * energy,
+      armAngle: Math.sin(t2 * 0.09) * 0.4 * energy,
+      energy,
+    };
+  }
+
+  function draw() {
+    syncSize();
+    W = canvas.width; H = canvas.height;
+    if (W < 10 || H < 10) { G.animFrame = requestAnimationFrame(draw); return; }
+    CX = Math.round(W / 2);
+    CY = Math.round(H * 0.38);
+
+    ctx.clearRect(0, 0, W, H);
+    const lvl = G.conv;
+    t++;
+    hitPulse *= 0.80;
+
+    drawBackground(lvl);
+    // SVG dancer handles the figure — canvas does background only
+
+    // Scanlines at high void
+    if (lvl > 0.55) {
+      const n = Math.round(lvl * 6);
+      for (let i = 0; i < n; i++) {
+        if (Math.random() > 0.35) continue;
+        const ly = Math.random() * H;
+        ctx.fillStyle = `rgba(0,0,0,${(Math.random() * 0.1).toFixed(3)})`;
+        ctx.fillRect(0, ly, W, 1 + Math.random() * 2);
+      }
+    }
+
+    G.animFrame = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+
+
+function dossTab(name) {
+  document.querySelectorAll('.dnav-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['overview','tactics','prompt'][i]===name);
+  });
+  document.querySelectorAll('.view-panel').forEach(p=>p.classList.remove('active'));
+  const tp = document.getElementById('tab-'+name);
+  if(!tp) return;
+  tp.classList.add('active');
+}
+
+document.querySelectorAll('.lyric-block').forEach(b => {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('.lyric-block').forEach(el=>el.classList.remove('sel'));
+    this.classList.add('sel');
+  });
+});
+// Select first by default
+document.querySelector('.lyric-block')?.classList.add('sel');
+
+// ═══ AUDIO PLAYER (dossier) ═══
+const audio = document.getElementById('shared-audio');
+const playBtn = document.getElementById('play-btn');
+const timDisp = document.getElementById('time-disp');
+const waveProg = document.getElementById('wave-prog');
+
+function buildWaveform() {
+  const bars = document.getElementById('wave-bars');
+  if(!bars||bars.children.length>0) return;
+  for(let i=0;i<130;i++) {
+    const b=document.createElement('div');
+    b.className='wave-bar';
+    const h=18+Math.random()*65;
+    b.style.height=h+'%';
+    b.style.background=`hsl(${170+i*.4},55%,${18+h*.28}%)`;
+    bars.appendChild(b);
+  }
+}
+
+function toggleAudio() {
+  if(audio.paused) { audio.play(); playBtn.textContent='⏸'; }
+  else { audio.pause(); playBtn.textContent='▶'; }
+}
+audio.addEventListener('timeupdate', () => {
+  if(!audio.duration) return;
+  const pct = audio.currentTime/audio.duration;
+  waveProg.style.width=(pct*100)+'%';
+  const m=Math.floor(audio.currentTime/60), s=Math.floor(audio.currentTime%60);
+  const dm=Math.floor(audio.duration/60), ds=Math.floor(audio.duration%60);
+  timDisp.textContent=m+':'+String(s).padStart(2,'0')+' / '+dm+':'+String(ds).padStart(2,'0');
+  const active=Math.floor(pct*130);
+  document.querySelectorAll('.wave-bar').forEach((b,i)=>{
+    if(i<active) b.style.background='#2adc6a';
+    else { const h=parseFloat(b.style.height); b.style.background=`hsl(${170+i*.4},55%,${18+h*.28}%)`; }
+  });
+});
+audio.addEventListener('ended',()=>{playBtn.textContent='▶';});
+function seekAudio(e) {
+  if(!audio.duration) return;
+  const r=e.currentTarget.getBoundingClientRect();
+  audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
+}
+</script>
+</body>
+</html>
